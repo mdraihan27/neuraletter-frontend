@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 /* @import "tw-animate-css"; */
@@ -25,6 +29,8 @@
   --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-focused: var(--focused);
+  --color-hover-focused: var(--hover-focused);
+
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
@@ -236,6 +242,20 @@ body {
   font-style: italic;
 }
 
+.righteous-regular {
+  font-family: "Righteous", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.rubik-80s-fade-regular {
+  font-family: "Rubik 80s Fade", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
 :root {
   --radius: 0.625rem;
   --background: #080808;
@@ -270,6 +290,7 @@ body {
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
   --focused: #92adff;
+  --hover-focused: #7094ff;
 }
 
 .dark {

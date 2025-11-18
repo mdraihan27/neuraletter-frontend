@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 const TypingText = ({
   text,
   as: Component = 'div',
-  typingSpeed = 500,
+  typingSpeed = 200,
   initialDelay = 0,
   pauseDuration = 2000,
   deletingSpeed = 3,
