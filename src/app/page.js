@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { GradientText } from "@/components/ui/shadcn-io/gradient-text";
 import { Nav } from "@/components/ui/nav";
+import { DemoEmail } from "@/components/ui/landing/demo-email";
 
 import Image from "next/image";
 
@@ -155,6 +156,7 @@ export default function Home() {
           <h2 className="text-white text-center font-bold text-4xl ">
             What's <span className="text-focused font-bold">NeuraLetter</span> ?
           </h2>
+          <DemoEmail></DemoEmail>
           <div className="flex justify-center gap-10 items-center mt-20">
             <div className="flex flex-col gap-8 max-w-[400px] text-white text-[50px] font-bold text-right"></div>
 
