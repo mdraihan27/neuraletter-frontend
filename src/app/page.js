@@ -152,7 +152,7 @@ export default function Home() {
           </p>
         </main>
 
-        <section className="mt-44">
+        <section className="mt-44 ">
           <h2 className="text-white text-center font-bold text-4xl ">
             What's <span className="text-focused font-bold">NeuraLetter</span> ?
           </h2>
