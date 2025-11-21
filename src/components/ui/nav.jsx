@@ -3,11 +3,21 @@
 import Image from "next/image";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 
-function NavItem({ navItemName, redirectLink }) {
+function NavItem({ navItemName, targetRef, offset }) {
   return (
     <button
-      className="text-white font-normal text-[16px]"
-      onClick={() => (window.location.href = redirectLink)}
+      className="text-white font-normal text-[16px] cursor-pointer hover:text-focused"
+      onClick={() => {
+        if (!targetRef.current) return;
+
+        const elementTop = targetRef.current.getBoundingClientRect().top;
+        const scrollY = window.scrollY + elementTop - offset; // offset of 100px
+
+        window.scrollTo({
+          top: scrollY,
+          behavior: "smooth",
+        });
+      }}
     >
       {navItemName}
     </button>
@@ -17,7 +27,10 @@ function NavItem({ navItemName, redirectLink }) {
 function NavButton({ id, navButtonName, redirectLink }) {
   if (id === "try") {
     return (
-      <ShimmerButton className="flex gap-1 ps-[30px] h-[46px] w-[120px] rounded-full me-[7px]">
+      <ShimmerButton
+        className="flex gap-1 ps-[30px] h-[46px] w-[120px] rounded-full me-[7px] cursor-pointer "
+        onClick={() => (window.location.href = redirectLink)}
+      >
         Try Now{" "}
         <Image
           src="/images/icons/arrow_forward.svg"
@@ -30,7 +43,7 @@ function NavButton({ id, navButtonName, redirectLink }) {
   } else {
     return (
       <button
-        className="text-white font-normal text-[16px]"
+        className="text-white font-normal text-[16px] cursor-pointer hover:text-focused"
         onClick={() => (window.location.href = redirectLink)}
       >
         {navButtonName}
@@ -41,7 +54,7 @@ function NavButton({ id, navButtonName, redirectLink }) {
 
 export function Nav({ navItems, navButtons }) {
   return (
-    <div className="w-[1080px] h-[80px] rounded-full border-[1px] border-[#92adff30]  backdrop-blur-3xl bg-linear-to-tr from-[#0000005] to-[#ffffff5] mt-6 flex justify-between items-center ">
+    <div className="w-320 h-18 rounded-full border border-[#92adff30]  backdrop-blur-3xl bg-linear-to-tr from-[#0000005] to-[#ffffff5]  flex justify-between items-center mx-auto fixed top-6 left-1/2 -translate-x-1/2 z-50 ">
       <div className="flex items-center gap-2 ms-5">
         <Image
           src="/images/neuraletter_logo.png"
@@ -49,7 +62,9 @@ export function Nav({ navItems, navButtons }) {
           width={20}
           height={20}
         />
-        <p className="text-white font-bold text-[21px] ">NeuraLetter</p>
+        <p className="text-white font-bold text-[21px] cursor-pointer">
+          NeuraLetter
+        </p>
       </div>
 
       <div className="flex justify-around px-4 gap-10 ms-1 items-center">
@@ -57,7 +72,8 @@ export function Nav({ navItems, navButtons }) {
           <NavItem
             key={navItem.id}
             navItemName={navItem.navItemName}
-            redirectLink={navItem.redirectLink}
+            targetRef={navItem.targetRef}
+            offset={navItem.offset}
           ></NavItem>
         ))}
       </div>

@@ -36,7 +36,7 @@ export const title = "Multi-Column Footer";
 
 export function FooterColumns01() {
   return (
-    <footer className="w-full border-t pb-8 pt-16 text-white mt-24">
+    <footer className="w-full border-t border-focused pb-8 pt-16 text-white mt-24">
       <div className="container mx-auto px-4">
         <div className="flex justify-between ">
           <div>
