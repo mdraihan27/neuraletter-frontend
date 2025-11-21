@@ -327,6 +327,24 @@ body {
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+@theme inline {
+  --animate-meteor-effect: meteor 5s linear infinite;
+ 
+  @keyframes meteor {
+    0% {
+      transform: rotate(215deg) translateX(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(215deg) translateX(-500px);
+      opacity: 0;
+    }
+  }
+}
+
 /* Hide vertical scrollbar */
 .hide-scrollbar-y {
   overflow-y: scroll; /* keeps scrolling functional */
@@ -354,4 +372,20 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Infinite moving cards animation */
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.scroller .animate-scroll {
+  animation: scroll var(--animation-duration,40s) linear infinite;
+  animation-direction: var(--animation-direction, normal);
+}
+
+.scroller:hover .animate-scroll {
+  animation-play-state: paused;
 }
