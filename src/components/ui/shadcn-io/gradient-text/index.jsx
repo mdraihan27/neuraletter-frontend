@@ -9,7 +9,7 @@ function GradientText({
   className,
   gradient = '',
   neon = false,
-  transition = { duration: 40, repeat: Infinity, ease: 'linear' },
+  transition = { duration: 25, repeat: Infinity, ease: 'linear' },
   ...props
 }) {
   const baseStyle = {

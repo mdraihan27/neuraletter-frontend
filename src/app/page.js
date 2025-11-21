@@ -11,8 +11,12 @@ import { LampContainer } from "@/components/ui/lamp";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { GradientText } from "@/components/ui/shadcn-io/gradient-text/index";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
 import { Beams } from "@/components/Beams";
 import Silk from "@/components/Silk/Silk";
+import { ItemCard } from "@/components/ui/landing/item-card";
+import { Brain, Clock, Search, Mail } from "lucide-react";
+import { PricingCard } from "@/components/ui/landing/pricing-card";
 
 export default function Home() {
   const [isTyping, setIsTyping] = useState(false);
@@ -31,7 +35,7 @@ export default function Home() {
               { id: "try", navButtonName: "Try Now", redirectLink: "" },
             ]}
           ></Nav>
-          <main className="w-dvw flex justify-center items-center flex-col">
+          <div className="w-dvw flex justify-center items-center flex-col">
             <h1 className="text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16">
               NeuraLetter
             </h1>
@@ -112,35 +116,17 @@ export default function Home() {
                 regularly
               </span>
             </p>
-          </main>
+          </div>
         </AuroraBackground>
       </div>
 
       <div className="mt-5 flex flex-col items-center">
-        {/* <Beams
-          beamWidth={2}
-          beamHeight={15}
-          beamNumber={12}
-          lightColor="#ffffff"
-          speed={2}
-          noiseIntensity={1.75}
-          scale={0.2}
-          rotation={0}
-          className="w-[1920px]"
-        /> */}
-        {/* <Silk
-          speed={5}
-          scale={1}
-          color="#7B7481"
-          noiseIntensity={1}
-          rotation={0}
-          className="h-full"
-        /> */}
         <GradientText
-          text="How does it work?"
+          text="Features"
           gradient="linear-gradient(90deg, #92adff 0%, #ffffff 50%, #92adff 100%)"
           className="absolute z-40 mt-10 text-3xl font-bold"
         />
+        {/* <h3 className="absolute z-40 mt-10 text-3xl font-bold bg-linear-to-r from-gray-500 via-[#ffffff] to-gray-500 text-transparent bg-clip-text" >How does it work?</h3> */}
         ;
         <LampContainer className="font-poppins ">
           <InfiniteMovingCards
@@ -150,27 +136,61 @@ export default function Home() {
             pauseOnHover={false}
           ></InfiniteMovingCards>
         </LampContainer>
-        <div className="flex justify-center gap-10 items-center mt-20">
-          <div className="flex flex-col gap-8 max-w-[400px] text-white text-[50px] font-bold text-right"></div>
-
-          <EmailSkeleton className=""></EmailSkeleton>
-
-          <div className="flex flex-col gap-8 max-w-[400px] text-white text-[23px] font-light text-left">
-            <p>
-              <span className="text-focused font-bold">Any update</span> of your
-              topic of interest would be{" "}
-              <span className="text-focused font-bold">mailed to you</span>
-              <br></br> in your chosen frequency. <br></br>
-              <br></br>Using{" "}
-              <span className="text-focused font-bold">
-                state of the art<br></br> web searching,
-              </span>
-              <br></br>AI will ensure you don't miss anything.
-            </p>
-          </div>
+        <div className="flex gap-10 absolute mt-[750px]">
+          <ItemCard text={"Explain your interests"} ItemIcon={Brain} />
+          <ItemCard text={"Choose update frequency"} ItemIcon={Clock} />
+          <ItemCard text={"AI researches for you 24/7"} ItemIcon={Search} />
+          <ItemCard text={"Summaries in your inbox"} ItemIcon={Mail} />
         </div>
-        
       </div>
+
+      <div className="w-full flex flex-col items-center ">
+        {/* <GradientText
+          text="Pricing"
+          gradient="linear-gradient(90deg, #92adff 0%, #ffffff 50%, #92adff 100%)"
+          className="z-40 mt-10 text-3xl font-bold"
+        /> */}
+
+        <h4 className="text-white text-3xl">Choose the plan best for you</h4>
+
+        <div className="flex w-full mt-24 justify-center gap-10">
+          <PricingCard
+            planName={"Free"}
+            comment={"Perfect for trying Neuraletter"}
+            price={"0"}
+            features={["Analysis by free LLM models", "One topic per user"]}
+          />
+          <div className="flex justify-center items-center w-[362px] h-[532px] rounded-2xl bg-linear-to-br from-[#92adff] to-transparent">
+            <div className="bg-black rounded-2xl">
+              <PricingCard
+                planName={"Pro"}
+                comment={"Perfect for professional research"}
+                price={"1.99"}
+                features={[
+                  "Analysis by pro LLM models",
+                  "10 topics per user",
+                  "24/7 support",
+                  "Cancel anytime",
+                ]}
+              />
+            </div>
+          </div>
+          <PricingCard
+            planName={"Pro Plus"}
+            comment={"Perfect if research earns you money"}
+            price={"10"}
+            features={[
+              "Analysis by pro LLM models",
+              "No topic limits",
+              "Get discounts as you go",
+              "24/7 support",
+              "Cancel anytime",
+            ]}
+          />
+        </div>
+      </div>
+
+      <FooterColumns01 className="" />
     </div>
   );
 }
