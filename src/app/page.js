@@ -4,7 +4,7 @@ import { EmailSkeleton } from "@/components/layout/email-skeleton";
 import TypingText from "@/components/ui/shadcn-io/typing-text/index";
 import { Nav } from "@/components/ui/nav";
 import { Button } from "@/components/ui/button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import React from "react";
 import { motion } from "motion/react";
 import { LampContainer } from "@/components/ui/lamp";
@@ -21,9 +21,16 @@ import { PricingCard } from "@/components/ui/landing/pricing-card";
 
 export default function Home() {
   const [isTyping, setIsTyping] = useState(false);
+  const [fadeIn, setFadeIn] = useState(false)
   const homeRef = useRef(null);
   const featureRef = useRef(null);
   const pricingRef = useRef(null);
+
+  useEffect(() => {
+    setFadeIn(true)
+  }, []);
+
+
   return (
     <div>
       <Nav
@@ -42,17 +49,17 @@ export default function Home() {
       <div className="w-full hide-scrollbar-y bg-black relative" ref={homeRef}>
         <AuroraBackground className="bg-black">
           <div className="w-dvw flex justify-center items-center flex-col mt-28">
-            <h1 className="text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16">
+            <h1 className={"text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16 will-fade-in-up " + (fadeIn ? "fade-in-up" : "")}>
               NeuraLetter
             </h1>
-            <h1 className="text-[74px] text-white font-bold ">
+            <h1 className={"text-[74px] text-white font-bold will-fade-in-up " + (fadeIn ? "fade-in-up" : "")}>
               Newsletter Redefined
             </h1>
-            <h2 className="text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent">
+            <h2 className={"text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent will-fade-in-up " + (fadeIn ? "fade-in-up" : "")}>
               Powered by AI
             </h2>
 
-            <div className="border-[#161616] border-4 bg-[#18181885] h-[230px] w-[700px] rounded-3xl mt-24 px-11 shadow-[inset_0_0_0_2px_#92adff20]">
+            <div className={"border-[#161616] border-4 bg-[#18181885] h-[230px] w-[700px] rounded-3xl mt-24 px-11 shadow-[inset_0_0_0_2px_#92adff20] "}>
               <textarea
                 className="bg-[#ffffff0] w-[600px] h-[100px] absolute text-xl text-[#ffffff75] resize-none mt-9 focus:outline-none"
                 autoFocus
@@ -61,7 +68,9 @@ export default function Home() {
                 }}
               ></textarea>
               <div className="flex flex-col justify-between h-[230px] ">
-                {!isTyping && (
+
+                
+               
                   <TypingText
                     text={[
                       "Latest research papers on Transformers, model and Neural networks",
@@ -76,10 +85,11 @@ export default function Home() {
                     cursorCharacter="|"
                     cursorClassName="bg-white ms-2 h-[20px]"
                     className="text-xl mt-9"
+                    style={{ visibility: isTyping ? "hidden" : "visible" }}
                     textColors={["#ffffff35"]}
                     variableSpeed={{ min: 10, max: 90 }}
                   />
-                )}
+                
                 <div className="flex justify-between  items-center mb-7 ">
                   <div className="w-[150px] h-[30px] flex items-center bg-[#202020] rounded-sm ">
                     <select
@@ -113,7 +123,7 @@ export default function Home() {
               </div>
             </div>
 
-            <p className="text-white text-xl mt-3 ">
+            <p className={"text-white text-xl mt-3 "}>
               <span className="text-white font-medium ">
                 Ask AI to{" "}
                 <span className="text-focused">
@@ -176,7 +186,7 @@ export default function Home() {
                   price={"1.99"}
                   features={[
                     "Analysis by pro LLM models",
-                    "10 topics per user",
+                    "5 topics per user",
                     "24/7 support",
                     "Cancel anytime",
                   ]}
@@ -186,7 +196,7 @@ export default function Home() {
             <PricingCard
               planName={"Pro Plus"}
               comment={"Perfect if research earns you money"}
-              price={"10"}
+              price={"9.99"}
               features={[
                 "Analysis by pro LLM models",
                 "No topic limits",

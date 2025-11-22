@@ -345,6 +345,28 @@ body {
   }
 }
 
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Two-phase fade-in: apply .will-fade-in-up initially, then add .fade-in-up to animate */
+.will-fade-in-up {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Hide vertical scrollbar */
 .hide-scrollbar-y {
   overflow-y: scroll; /* keeps scrolling functional */
