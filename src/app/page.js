@@ -13,35 +13,43 @@ import { GradientText } from "@/components/ui/shadcn-io/gradient-text/index";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
 import { Beams } from "@/components/Beams";
-import Silk from "@/components/Silk/Silk";
+import { DarkVeil } from "@/components/DarkVeil";
 import { ItemCard } from "@/components/ui/landing/item-card";
 import { Brain, Clock, Search, Mail } from "lucide-react";
 import { PricingCard } from "@/components/ui/landing/pricing-card";
 
-
 export default function Home() {
   const [isTyping, setIsTyping] = useState(false);
-  const [fadeIn, setFadeIn] = useState(false)
+  const [fadeIn, setFadeIn] = useState(false);
   const homeRef = useRef(null);
   const featureRef = useRef(null);
   const pricingRef = useRef(null);
 
   useEffect(() => {
-    setFadeIn(true)
+    setFadeIn(true);
   }, []);
-
 
   return (
     <div>
       <Nav
         navItems={[
-          { id: "home", navItemName: "Home", targetRef: homeRef, offset:0 },
-          { id: "about", navItemName: "Feature", targetRef: featureRef, offset:100  },
-          { id: "features", navItemName: "Pricing", targetRef: pricingRef, offset:120  },
+          { id: "home", navItemName: "Home", targetRef: homeRef, offset: 0 },
+          {
+            id: "about",
+            navItemName: "Feature",
+            targetRef: featureRef,
+            offset: 100,
+          },
+          {
+            id: "features",
+            navItemName: "Pricing",
+            targetRef: pricingRef,
+            offset: 120,
+          },
         ]}
         navButtons={[
           { id: "login", navButtonName: "Login", redirectLink: "" },
-          { id: "try", navButtonName: "Try Now", redirectLink: "" },
+          { id: "try", navButtonName: "Try Now", redirectLink: "/register" },
         ]}
         className="mx-auto"
       ></Nav>
@@ -49,17 +57,36 @@ export default function Home() {
       <div className="w-full hide-scrollbar-y bg-black relative" ref={homeRef}>
         <AuroraBackground className="bg-black">
           <div className="w-dvw flex justify-center items-center flex-col mt-28">
-            <h1 className={"text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16 will-fade-in-up " + (fadeIn ? "fade-in-up" : "")}>
+            <h1
+              className={
+                "text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16 will-fade-in-up " +
+                (fadeIn ? "fade-in-up" : "")
+              }
+            >
               NeuraLetter
             </h1>
-            <h1 className={"text-[74px] text-white font-bold will-fade-in-up " + (fadeIn ? "fade-in-up" : "")}>
+            <h1
+              className={
+                "text-[74px] text-white font-bold will-fade-in-up " +
+                (fadeIn ? "fade-in-up" : "")
+              }
+            >
               Newsletter Redefined
             </h1>
-            <h2 className={"text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent will-fade-in-up " + (fadeIn ? "fade-in-up" : "")}>
+            <h2
+              className={
+                "text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent will-fade-in-up " +
+                (fadeIn ? "fade-in-up" : "")
+              }
+            >
               Powered by AI
             </h2>
 
-            <div className={"border-[#161616] border-4 bg-[#18181885] h-[230px] w-[700px] rounded-3xl mt-24 px-11 shadow-[inset_0_0_0_2px_#92adff20] "}>
+            <div
+              className={
+                "border-[#161616] border-4 bg-[#18181885] h-[230px] w-[700px] rounded-3xl mt-24 px-11 shadow-[inset_0_0_0_2px_#92adff20] "
+              }
+            >
               <textarea
                 className="bg-[#ffffff0] w-[600px] h-[100px] absolute text-xl text-[#ffffff75] resize-none mt-9 focus:outline-none"
                 autoFocus
@@ -68,28 +95,25 @@ export default function Home() {
                 }}
               ></textarea>
               <div className="flex flex-col justify-between h-[230px] ">
+                <TypingText
+                  text={[
+                    "Latest research papers on Transformers, model and Neural networks",
+                    "Satellite Imagery Analysis, Military Movements, and Territorial Changes in Ongoing Conflicts in Eastern Europe and the Middle East",
+                    "AI Regulation Developments, Open-Source Model Leaks, Ethical AI Frameworks, and Corporate AI Strategy Announcements",
+                    "Innovations in Renewable Energy Storage, Battery Technology Advances, Green Hydrogen Projects, and International Energy Policy Shifts",
+                  ]}
+                  id="typing_text_prompt"
+                  typingSpeed={725}
+                  pauseDuration={1500}
+                  showCursor={false}
+                  cursorCharacter="|"
+                  cursorClassName="bg-white ms-2 h-[20px]"
+                  className="text-xl mt-9"
+                  style={{ visibility: isTyping ? "hidden" : "visible" }}
+                  textColors={["#ffffff35"]}
+                  variableSpeed={{ min: 10, max: 90 }}
+                />
 
-                
-               
-                  <TypingText
-                    text={[
-                      "Latest research papers on Transformers, model and Neural networks",
-                      "Satellite Imagery Analysis, Military Movements, and Territorial Changes in Ongoing Conflicts in Eastern Europe and the Middle East",
-                      "AI Regulation Developments, Open-Source Model Leaks, Ethical AI Frameworks, and Corporate AI Strategy Announcements",
-                      "Innovations in Renewable Energy Storage, Battery Technology Advances, Green Hydrogen Projects, and International Energy Policy Shifts",
-                    ]}
-                    id="typing_text_prompt"
-                    typingSpeed={725}
-                    pauseDuration={1500}
-                    showCursor={false}
-                    cursorCharacter="|"
-                    cursorClassName="bg-white ms-2 h-[20px]"
-                    className="text-xl mt-9"
-                    style={{ visibility: isTyping ? "hidden" : "visible" }}
-                    textColors={["#ffffff35"]}
-                    variableSpeed={{ min: 10, max: 90 }}
-                  />
-                
                 <div className="flex justify-between  items-center mb-7 ">
                   <div className="w-[150px] h-[30px] flex items-center bg-[#202020] rounded-sm ">
                     <select
@@ -162,24 +186,27 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="w-full flex flex-col items-center " ref={pricingRef}>
+        <div className="w-full flex flex-col items-center relative" ref={pricingRef}>
           {/* <GradientText
           text="Pricing"
           gradient="linear-gradient(90deg, #92adff 0%, #ffffff 50%, #92adff 100%)"
           className="z-40 mt-10 text-3xl font-bold"
         /> */}
+         <DarkVeil className={"absolute bottom-0  rotate-180 saturate-6"} />
 
-          <h4 className="text-white text-3xl">Choose the plan best for you</h4>
+          <h4 className="text-white text-3xl z-60">Choose the plan best for you</h4>
 
-          <div className="flex w-full mt-24 justify-center gap-10 ">
+          <div className="flex w-full mt-24 items-center justify-center gap-10 pb-20">
+           
             <PricingCard
               planName={"Free"}
               comment={"Perfect for trying Neuraletter"}
               price={"0"}
               features={["Analysis by free LLM models", "One topic per user"]}
             />
-            <div className="flex justify-center items-center w-[362px] h-[532px] rounded-2xl bg-linear-to-br from-[#92adff] to-transparent">
-              <div className="bg-black rounded-2xl">
+            <div className="flex flex-col items-center mb-[25px] rounded-2xl ">
+              <p className="mb-[2px] z-60 text-white font-semibold">Most Popular</p>
+             
                 <PricingCard
                   planName={"Pro"}
                   comment={"Perfect for professional research"}
@@ -191,7 +218,7 @@ export default function Home() {
                     "Cancel anytime",
                   ]}
                 />
-              </div>
+              
             </div>
             <PricingCard
               planName={"Pro Plus"}

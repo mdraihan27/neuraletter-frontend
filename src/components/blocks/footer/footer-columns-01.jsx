@@ -36,7 +36,7 @@ export const title = "Multi-Column Footer";
 
 export function FooterColumns01() {
   return (
-    <footer className="w-full border-t border-focused pb-8 pt-16 text-white mt-24">
+    <footer className="w-full border-t border-focused pb-8 pt-16 text-white bg-[#0f0f0f]">
       <div className="container mx-auto px-4">
         <div className="flex justify-between ">
           <div>
@@ -108,7 +108,7 @@ export function FooterColumns01() {
           <div>
             <p className="text-focused font-semibold text-[16px]">Send us a message</p>
             <p className="text-sm mt-6">You don't need to log in to share your opinion</p>
-            <textarea className="bg-slate-900 text-white focus:outline-none p-2 resize-none border-gray-800 border rounded-lg mt-4 w-[300px] h-[100px]" placeholder="Your message"></textarea>
+            <textarea className="bg-zinc-900 text-white focus:outline-none p-2 resize-none border-zinc-800 border rounded-lg mt-4 w-[300px] h-[100px]" placeholder="Your message"></textarea>
             <Button className="bg-focused hover:bg-hover-focused text-black items-center rounded-[12px] flex justify-center gap-2 w-[90px] h-[50px] text-[18px] font-medium mt-2">
               <p className="">Send</p>
             </Button>

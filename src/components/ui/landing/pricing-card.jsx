@@ -2,7 +2,7 @@ import { CircleCheckBig } from "lucide-react";
 
 export function PricingCard({ planName, price, features, comment }) {
   return (
-    <div className="p-8 flex flex-col text-white bg-linear-to-br from-[#92adff30] via-[#92adff10] to-transparent backdrop-blur-2xl rounded-2xl w-[360px] h-[530px]  justify-between">
+    <div className="p-8 flex flex-col text-white bg-linear-to-br from-[#92adff30] via-[#92adff10] to-transparent backdrop-blur-2xl rounded-2xl w-[360px] h-[530px]  justify-between ">
       <div className="flex flex-col gap-3">
         <h3 className="text-focused font-semibold text-2xl">{planName}</h3>
         <div className="flex items-baseline">
@@ -19,7 +19,7 @@ export function PricingCard({ planName, price, features, comment }) {
           ))}
         </div>
       </div>
-      <button className="mx-auto w-[290px] h-[50px] bg-linear-to-b from-[#92adff] to-[#92adff70] rounded-xl">
+      <button className="text-slate-900  mx-auto w-[290px] h-[50px] bg-linear-to-b from-[#92adff] to-[#92adff70] rounded-xl">
         {" "}
         Get Started
       </button>
