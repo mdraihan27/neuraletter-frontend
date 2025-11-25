@@ -6,7 +6,7 @@ export function PricingCard({ planName, price, features, comment }) {
       <div className="flex flex-col gap-3">
         <h3 className="text-focused font-semibold text-2xl">{planName}</h3>
         <div className="flex items-baseline">
-          <p className="text-5xl font-semibold ">{price}$</p>
+          <p className="text-5xl font-semibold ">${price}</p>
           <p className="">/month</p>
         </div>
         <p>{comment}</p>

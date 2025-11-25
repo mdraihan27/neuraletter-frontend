@@ -48,7 +48,7 @@ export default function Home() {
           },
         ]}
         navButtons={[
-          { id: "login", navButtonName: "Login", redirectLink: "" },
+          { id: "login", navButtonName: "Login", redirectLink: "/login" },
           { id: "try", navButtonName: "Try Now", redirectLink: "/register" },
         ]}
         className="mx-auto"

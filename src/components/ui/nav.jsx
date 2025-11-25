@@ -11,7 +11,7 @@ function NavItem({ navItemName, targetRef, offset }) {
         if (!targetRef.current) return;
 
         const elementTop = targetRef.current.getBoundingClientRect().top;
-        const scrollY = window.scrollY + elementTop - offset; // offset of 100px
+        const scrollY = window.scrollY + elementTop - offset; 
 
         window.scrollTo({
           top: scrollY,
@@ -53,10 +53,11 @@ function NavButton({ id, navButtonName, redirectLink }) {
 }
 
 export function Nav({ navItems, navButtons }) {
-  navItems=[];
   return (
     <div className="w-320 h-18 rounded-full border border-[#92adff30]  backdrop-blur-3xl bg-linear-to-tr from-[#0000005] to-[#ffffff5]  flex justify-between items-center mx-auto fixed top-6 left-1/2 -translate-x-1/2 z-50 ">
-      <div className="flex items-center gap-2 ms-5">
+      <div className="flex items-center gap-2 ms-5" onClick={() => (window.location.href = "/")}>
+                
+
         <Image
           src="/images/neuraletter_logo.png"
           alt="logo"

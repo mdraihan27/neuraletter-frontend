@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Renderer, Program, Mesh, Triangle, Vec2 } from 'ogl';
-import { twMerge } from 'tailwind-merge';
+import { cn } from "@/lib/utils";
+
 
 const vertex = `
 attribute vec2 position;
@@ -144,5 +145,5 @@ export function DarkVeil({
       window.removeEventListener('resize', resize);
     };
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
-  return <canvas ref={ref} className={twMerge("w-full", className)} />;
+  return <canvas ref={ref} className={cn("w-full", className)} />;
 }
