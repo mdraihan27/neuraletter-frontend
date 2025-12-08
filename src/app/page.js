@@ -3,20 +3,19 @@ import { AuroraBackground } from "@/components/ui/shadcn-io/aurora-background";
 import { EmailSkeleton } from "@/components/layout/email-skeleton";
 import TypingText from "@/components/ui/shadcn-io/typing-text/index";
 import { Nav } from "@/components/ui/nav";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/imported/button";
 import { useState, useRef, useEffect } from "react";
 import React from "react";
-import { motion } from "motion/react";
-import { LampContainer } from "@/components/ui/lamp";
-import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
-import { GradientText } from "@/components/ui/shadcn-io/gradient-text/index";
-import { BackgroundBeams } from "@/components/ui/background-beams";
+
+import { LampContainer } from "@/components/ui/imported/lamp";
+import { InfiniteMovingCards } from "@/components/ui/imported/infinite-moving-cards";
+
 import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
-import { Beams } from "@/components/Beams";
-import { DarkVeil } from "@/components/DarkVeil";
-import { ItemCard } from "@/components/ui/landing/item-card";
+
+import { DarkVeil } from "@/components/background/DarkVeil";
+import { ItemCard } from "@/app/item-card";
 import { Brain, Clock, Search, Mail } from "lucide-react";
-import { PricingCard } from "@/components/ui/landing/pricing-card";
+import { PricingCard } from "@/app/pricing-card";
 
 export default function Home() {
   const [isTyping, setIsTyping] = useState(false);
@@ -25,9 +24,7 @@ export default function Home() {
   const featureRef = useRef(null);
   const pricingRef = useRef(null);
 
-  useEffect(() => {
-    setFadeIn(true);
-  }, []);
+
 
   return (
     <div>
@@ -59,24 +56,21 @@ export default function Home() {
           <div className="w-dvw flex justify-center items-center flex-col mt-28">
             <h1
               className={
-                "text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16 will-fade-in-up " +
-                (fadeIn ? "fade-in-up" : "")
+                "text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16 "
               }
             >
               NeuraLetter
             </h1>
             <h1
               className={
-                "text-[74px] text-white font-bold will-fade-in-up " +
-                (fadeIn ? "fade-in-up" : "")
+                "text-[74px] text-white font-bold"
               }
             >
               Newsletter Redefined
             </h1>
             <h2
               className={
-                "text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent will-fade-in-up " +
-                (fadeIn ? "fade-in-up" : "")
+                "text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent "
               }
             >
               Powered by AI

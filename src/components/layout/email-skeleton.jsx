@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ShineBorder } from "@/components/ui/shine-border";
+import { ShineBorder } from "@/components/ui/imported/shine-border";
 
 function SingleEmailSkeleton() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { Github, Instagram, Twitter, Youtube } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/imported/button";
 
 
 const LINKS = [

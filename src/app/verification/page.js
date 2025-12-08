@@ -4,46 +4,43 @@ import { SignupForm } from "@/app/register/signup-form";
 import { Nav } from "@/components/ui/nav";
 import { GalleryVerticalEnd } from "lucide-react";
 import { DarkVeil } from "@/components/background/DarkVeil";
-import { Spinner } from "@/components/ui/spinner";
-
+import { VerificationForm } from "./verification-form";
 import { useState, useRef, useEffect } from "react";
 import React from "react";
 
 import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
+import { Spinner } from "@/components/ui/spinner";
 
-export default function Register() {
-  const [isTyping, setIsTyping] = useState(false);
-  const [fadeIn, setFadeIn] = useState(false);
-  const homeRef = useRef(null);
-  const featureRef = useRef(null);
-  const pricingRef = useRef(null);
+
+
+export default function Verification() {
   const [isLoading, setIsLoading] = useState(false);
-
   return (
     <div
-      className=" bg-[#0f0f0f]  absolute inset-0 z-0 flex flex-col items-center"
+      className="absolute inset-0 z-0 flex flex-col items-center "
       style={{
         background:
           "radial-gradient(125% 125% at 50% 100%, #000000 40%, #0A1C57 100%)",
       }}
     >
       {/* Your Content/Components */}
+
       {isLoading ? <Spinner /> : null}
 
       <Nav
         navItems={[]}
         navButtons={[
-          { id: "login", navButtonName: "Login", redirectLink: "/login" },
-          { id: "try", navButtonName: "Try Now", redirectLink: "" },
+          { id: "login", navButtonName: "Login", redirectLink: "/" },
+          { id: "try", navButtonName: "Try Now", redirectLink: "/register" },
         ]}
         className="mx-auto"
       ></Nav>
 
-      <div className=" flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 max-w-[500px]">
-        <GalleryVerticalEnd className="size-4" />
-
-        <SignupForm className={"scale-120 mt-20"} setIsLoading={setIsLoading}/>
-      </div>
+      <VerificationForm
+        className={"w-[400px] mt-60 mb-44 scale-130 "}
+        email={"email"}
+        setIsLoading={setIsLoading}
+      ></VerificationForm>
       <FooterColumns01 />
     </div>
   );

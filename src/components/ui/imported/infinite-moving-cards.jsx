@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
-import { DemoEmail } from "./landing/demo-email";
+import { DemoEmail } from "@/app/demo-email";
 
 export const InfiniteMovingCards = ({
   items,

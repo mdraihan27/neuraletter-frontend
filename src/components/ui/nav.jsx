@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { ShimmerButton } from "@/components/ui/imported/shimmer-button";
 
 function NavItem({ navItemName, targetRef, offset }) {
   return (

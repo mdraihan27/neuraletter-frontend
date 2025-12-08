@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { ShineBorder } from "@/components/ui/shine-border";
+import { ShineBorder } from "@/components/ui/imported/shine-border";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/ui/imported/accordion";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";

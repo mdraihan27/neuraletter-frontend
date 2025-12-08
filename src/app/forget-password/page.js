@@ -4,46 +4,39 @@ import { SignupForm } from "@/app/register/signup-form";
 import { Nav } from "@/components/ui/nav";
 import { GalleryVerticalEnd } from "lucide-react";
 import { DarkVeil } from "@/components/background/DarkVeil";
-import { Spinner } from "@/components/ui/spinner";
-
+import { Loader } from "@/components/ui/loader/loader";
 import { useState, useRef, useEffect } from "react";
 import React from "react";
-
+import { Spinner } from "@/components/ui/spinner";
 import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
+import { VerificationForm } from "../verification/verification-form";
+import { ForgetPasswordForm } from "./forget-password-form";
 
-export default function Register() {
-  const [isTyping, setIsTyping] = useState(false);
-  const [fadeIn, setFadeIn] = useState(false);
-  const homeRef = useRef(null);
-  const featureRef = useRef(null);
-  const pricingRef = useRef(null);
+export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div
-      className=" bg-[#0f0f0f]  absolute inset-0 z-0 flex flex-col items-center"
+      className="absolute inset-0 z-0 flex flex-col items-center "
       style={{
         background:
           "radial-gradient(125% 125% at 50% 100%, #000000 40%, #0A1C57 100%)",
       }}
     >
+      {isLoading ? <Spinner/> : null}
       {/* Your Content/Components */}
-      {isLoading ? <Spinner /> : null}
+      {/* <Loader isVisible={isLoading}></Loader> */}
 
       <Nav
         navItems={[]}
         navButtons={[
-          { id: "login", navButtonName: "Login", redirectLink: "/login" },
-          { id: "try", navButtonName: "Try Now", redirectLink: "" },
+          { id: "login", navButtonName: "Login", redirectLink: "/" },
+          { id: "try", navButtonName: "Try Now", redirectLink: "/register" },
         ]}
         className="mx-auto"
       ></Nav>
 
-      <div className=" flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 max-w-[500px]">
-        <GalleryVerticalEnd className="size-4" />
-
-        <SignupForm className={"scale-120 mt-20"} setIsLoading={setIsLoading}/>
-      </div>
+      <ForgetPasswordForm className={"w-[400px] mt-60 mb-44 scale-130 "} setIsLoading={setIsLoading}></ForgetPasswordForm>
       <FooterColumns01 />
     </div>
   );
