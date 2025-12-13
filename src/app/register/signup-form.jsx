@@ -75,14 +75,14 @@ export function SignupForm({ className, setIsLoading, ...props }) {
                   <Input
                     id="name"
                     type="text"
-                    placeholder="John"
+                    placeholder="Raihan"
                     required
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="name">Last Name</FieldLabel>
+                  <FieldLabel htmlFor="name">Hossen</FieldLabel>
                   <Input
                     id="name"
                     type="text"
@@ -98,7 +98,7 @@ export function SignupForm({ className, setIsLoading, ...props }) {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="raihan@example.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

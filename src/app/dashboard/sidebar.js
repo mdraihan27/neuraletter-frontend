@@ -12,10 +12,11 @@ import { useState } from "react";
 
 export function SideBar({ topicList, setIsProfileVisible, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [firstName, setFirstName]=useState(localStorage.getItem("first_name"))
   return (
     <div
       className={cn(
-        " bg-[#1f1f1f] h-full px-3 py-3 text-white flex flex-col justify-between", className)
+        " bg-[#1f1f1f] h-full px-3 py-3 text-white flex flex-col justify-between w-1/5", className)
       }
     >
       <div>
@@ -77,7 +78,7 @@ export function SideBar({ topicList, setIsProfileVisible, className }) {
         />
         <SideBarItem
           Icon={UserRoundCog}
-          text={localStorage.getItem("first_name")}
+          text={firstName}
           isCollapsed={isCollapsed}
           onClick={()=>setIsProfileVisible(true)}
         />

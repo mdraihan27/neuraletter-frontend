@@ -7,6 +7,7 @@ import { logOut } from "@/lib/logOut";
 import { Spinner } from "@/components/ui/spinner";
 import { Profile } from "./profile";
 import { cn } from "@/lib/utils";
+import {Main} from "@/app/dashboard/main"
 
 export default function Dashboard() {
   const [isProfileVisible, setIsProfileVisible] = useState(false);
@@ -17,10 +18,10 @@ export default function Dashboard() {
     setIsLoading(false);
   };
   return (
-    <div className="relative w-screen h-screen">
+    <div className="relative w-screen h-screen bg-zinc-800 ">
       <div
         className={cn(
-          " bg-zinc-800 inset-0 z-0 flex justify-between w-[1920px] h-screen  ",
+          " bg-zinc-800 inset-0 z-0 flex justify-between  h-screen  ",
           isProfileVisible
             ? "blur-[1px] brightness-60 pointer-events-none"
             : "brightness-100 blur-none pointer-events-auto"
@@ -32,17 +33,18 @@ export default function Dashboard() {
           topicList={topicList}
           setIsProfileVisible={setIsProfileVisible}
         />
-        <div className={"flex flex-col justify-between h-full "}>
+        <div className={"flex flex-col h-full w-full px-8 gap-8"}>
           <div>
             <div
-              className="text-white flex items-center justify-between gap-3 pt-6 pe-6 cursor-pointer hover:text-focused"
+              className="text-white flex items-center justify-end gap-3 pt-6 cursor-pointer hover:text-focused"
               onClick={handleLogOutClick}
             >
               <p>Log Out</p>
               <LogOut />
             </div>
           </div>
-          <div>Somthing</div>
+          <Main/>
+         
         </div>
       </div>
       <Profile

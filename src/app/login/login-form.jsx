@@ -74,7 +74,7 @@ export function LoginForm({ className, setIsLoading, ...props }) {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="raihan@example.com"
                   required
                   value={email} // bind value to state
                   onChange={(e) => setEmail(e.target.value)}
