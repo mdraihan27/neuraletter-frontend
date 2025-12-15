@@ -1,6 +1,6 @@
 "use client";
 import { LogOut } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { SideBar } from "./sidebar";
 import { logOut } from "@/lib/logOut";
@@ -8,6 +8,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Profile } from "./profile";
 import { cn } from "@/lib/utils";
 import {Main} from "@/app/dashboard/main"
+import { fetchUser } from "@/api/userApi";
 
 export default function Dashboard() {
   const [isProfileVisible, setIsProfileVisible] = useState(false);
@@ -17,6 +18,8 @@ export default function Dashboard() {
     await logOut();
     setIsLoading(false);
   };
+
+  
   return (
     <div className="relative w-screen h-screen bg-zinc-800 ">
       <div

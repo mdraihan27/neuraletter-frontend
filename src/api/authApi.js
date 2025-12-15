@@ -83,3 +83,16 @@ export async function signup(first_name, last_name, email, password) {
     };
   }
 }
+
+export async function googleLogin(email, password) {
+  try {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/login`;
+  } catch (error) {
+    console.log(error);
+
+    return {
+      success: false,
+      error: "Network error",
+    };
+  }
+}

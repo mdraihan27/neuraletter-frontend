@@ -8,19 +8,38 @@ import { Loader } from "@/components/ui/loader/loader";
 import { useState, useRef, useEffect } from "react";
 import React from "react";
 import { Spinner } from "@/components/ui/spinner";
+import { redirect } from "next/navigation";
+import Cookies from "js-cookie";
+import { fetchUser } from "@/api/userApi";
 
 import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
 
-export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const queryMessage = params.get("error");
+export default function GoogleCallback() {
+  const [isLoading, setIsLoading] = useState(true);
 
-    if (queryMessage) {
-      setError(queryMessage);
-    }
+  useEffect(() => {
+    const validateCookieAndFetchUser = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("access_token");
+
+      if (token) {
+        Cookies.set("access_token", token, {
+          expires: 30,
+          secure: true,
+        });
+        const response = await fetchUser();
+        if (response?.success) {
+          redirect("/dashboard");
+        } else {
+            Cookies.remove("access_token")
+          redirect("/register?error=Google%20Authentication%20failed");
+        }
+      } else {
+        redirect("/register?error=Google%20Authentication%20failed");
+      }
+    };
+
+    validateCookieAndFetchUser();
   }, []);
 
   return (
@@ -44,11 +63,8 @@ export default function Login() {
         className="mx-auto"
       ></Nav>
 
-      <LoginForm
-        className={"w-[400px] mt-60 mb-44 scale-130 "}
-        setIsLoading={setIsLoading}
-        error={error}
-      ></LoginForm>
+      <div className="min-h-screen"></div>
+
       <FooterColumns01 />
     </div>
   );

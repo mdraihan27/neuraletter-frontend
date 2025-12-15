@@ -15,12 +15,12 @@ import {
   FieldLabel,
 } from "@/components/ui/imported/field";
 import { Input } from "@/components/ui/imported/input";
-import { signup } from "@/api/authApi";
+import { signup, googleLogin } from "@/api/authApi";
 import { useEffect, useState } from "react";
 import { sendVerificationCode } from "@/api/verificationApi";
 import { redirect } from "next/navigation";
 
-export function SignupForm({ className, setIsLoading, ...props }) {
+export function SignupForm({ className, setIsLoading, error, ...props }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -28,7 +28,11 @@ export function SignupForm({ className, setIsLoading, ...props }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [passwordMatched, setPasswordMatched] = useState(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(error);
+
+  useEffect(() => {
+    setMessage(error);
+  }, [error]);
 
   const handleSignupClick = async () => {
     setIsLoading(true);
@@ -42,6 +46,18 @@ export function SignupForm({ className, setIsLoading, ...props }) {
       } else {
         // redirect("/dashboard");
       }
+    } else {
+      setMessage(result.error);
+    }
+    setIsLoading(false);
+  };
+
+  const handleGoogleSignupClick = async () => {
+    setIsLoading(true);
+    const result = await googleLogin()
+    
+    if (result.success) {
+    //  redirect(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/login`);
     } else {
       setMessage(result.error);
     }
@@ -86,7 +102,7 @@ export function SignupForm({ className, setIsLoading, ...props }) {
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Doe"
+                    placeholder="Hossen"
                     required
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
@@ -148,7 +164,7 @@ export function SignupForm({ className, setIsLoading, ...props }) {
                 >
                   Create Account
                 </Button>
-                <Button type="button" className="flex items-center gap-2">
+                <Button type="button" className="flex items-center gap-2 cursor-pointer" onClick={handleGoogleSignupClick}>
                   <img
                     src="/images/icons/Google.svg"
                     width={18}

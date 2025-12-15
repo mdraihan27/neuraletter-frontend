@@ -17,16 +17,21 @@ import {
 } from "@/components/ui/imported/field";
 import { Input } from "@/components/ui/imported/input";
 import { redirect } from "next/navigation";
-import { login } from "@/api/authApi";
-import { useState } from "react";
+import { login, googleLogin } from "@/api/authApi";
+import { useEffect, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { sendVerificationCode } from "@/api/verificationApi";
 
-export function LoginForm({ className, setIsLoading, ...props }) {
+export function LoginForm({ className, setIsLoading, error, ...props }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(error);
   // const [isLoading, setIsLoading] = useState(false);
+
+  // Keep message in sync with updated error props (e.g., query string error)
+  useEffect(() => {
+    setMessage(error);
+  }, [error]);
 
   const handleLoginClick = async () => {
     setIsLoading(true);
@@ -49,6 +54,18 @@ export function LoginForm({ className, setIsLoading, ...props }) {
     } else {
       setMessage(result.error);
     }
+  };
+
+  const handleGoogleLoginClick = async () => {
+    setIsLoading(true);
+    const result = await googleLogin();
+
+    if (result.success) {
+      //  redirect(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/login`);
+    } else {
+      setMessage(result.error);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -106,7 +123,7 @@ export function LoginForm({ className, setIsLoading, ...props }) {
                 >
                   Login
                 </Button>
-                <Button>
+                <Button type="button" onClick={handleGoogleLoginClick}>
                   <img
                     src="/images/icons/Google.svg"
                     width={18}

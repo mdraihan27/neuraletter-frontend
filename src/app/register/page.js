@@ -12,11 +12,15 @@ import React from "react";
 import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
 
 export default function Register() {
-  const [isTyping, setIsTyping] = useState(false);
-  const [fadeIn, setFadeIn] = useState(false);
-  const homeRef = useRef(null);
-  const featureRef = useRef(null);
-  const pricingRef = useRef(null);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const queryMessage = params.get("error");
+
+    if (queryMessage) {
+      setError(queryMessage);
+    }
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -42,7 +46,7 @@ export default function Register() {
       <div className=" flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 max-w-[500px]">
         <GalleryVerticalEnd className="size-4" />
 
-        <SignupForm className={"scale-120 mt-20"} setIsLoading={setIsLoading}/>
+        <SignupForm className={"scale-120 mt-20"} setIsLoading={setIsLoading} error={error}/>
       </div>
       <FooterColumns01 />
     </div>
