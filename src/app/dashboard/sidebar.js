@@ -6,25 +6,58 @@ import {
   Plus,
   Settings,
   UserRoundCog,
+  Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { deleteTopic, getTopicById, getUserTopics } from "@/api/topicApi";
 
-export function SideBar({ topicList, setIsProfileVisible, className }) {
+export function SideBar({
+  setIsProfileVisible,
+  setIsCreateTopicFormVisible,
+  className,
+  topicList,
+  setTopicList,
+  setIsLoading,
+  setTopicTitle,
+  setTopicDescription,
+  setTopicModel,
+  setIsDescriptionChatVisible,
+  setSelectedTopicId,
+}) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [firstName, setFirstName]=useState(localStorage.getItem("first_name"))
+  const [firstName, setFirstName] = useState(
+    localStorage.getItem("first_name")
+  );
+
+  useEffect(() => {
+    const getTopicList = async () => {
+      const response = await getUserTopics();
+      console.log(response);
+      if (response.success && response.data.topics) {
+        setTopicList(response.data.topics);
+      } else {
+        setTopicList([]);
+      }
+    };
+
+    getTopicList();
+  }, []);
+
   return (
     <div
       className={cn(
-        " bg-[#1f1f1f] h-full px-3 py-3 text-white flex flex-col justify-between w-1/5", className)
-      }
+        "bg-[#1f1f1f] h-full px-3 py-3 text-white flex flex-col justify-between transition-all duration-200",
+        isCollapsed ? "w-18" : "w-1/5",
+        className
+      )}
     >
       <div>
         <div
-          className={
-            cn("flex justify-between pb-3 ",
-            (isCollapsed ? "flex-col gap-2 items-center" : "flex-row gap-0"))
-          }
+          className={cn(
+            "flex justify-between pb-3 ",
+            isCollapsed ? "flex-col gap-2 items-center" : "flex-row gap-0"
+          )}
         >
           <div className="w-10 h-10 cursor-pointer  hover:bg-zinc-600 flex items-center justify-center rounded-full">
             <Image
@@ -52,17 +85,25 @@ export function SideBar({ topicList, setIsProfileVisible, className }) {
             Icon={Plus}
             text={"New Topic"}
             className={"bg-[#92adff70] mt-2 "}
-            
             isCollapsed={isCollapsed}
+            onClick={() => setIsCreateTopicFormVisible(true)}
           />
 
           <div>
             <div className="flex flex-col gap-1 mt-5">
               {topicList.map((topic) => (
                 <Topic
-                  topicName={topic.topicName}
+                  topicName={topic.title}
                   key={topic.id}
+                  topicId={topic.id}
                   isCollapsed={isCollapsed}
+                  setTopicList={setTopicList}
+                  setIsLoading={setIsLoading}
+                  setTopicTitle={setTopicTitle}
+                  setTopicDescription={setTopicDescription}
+                  setTopicModel={setTopicModel}
+                  setIsDescriptionChatVisible={setIsDescriptionChatVisible}
+                  setSelectedTopicId={setSelectedTopicId}
                 ></Topic>
               ))}
             </div>
@@ -80,18 +121,67 @@ export function SideBar({ topicList, setIsProfileVisible, className }) {
           Icon={UserRoundCog}
           text={firstName}
           isCollapsed={isCollapsed}
-          onClick={()=>setIsProfileVisible(true)}
+          onClick={() => setIsProfileVisible(true)}
         />
       </div>
     </div>
   );
 }
 
-export function Topic({ topicName, isCollapsed }) {
+export function Topic({
+  topicName,
+  isCollapsed,
+  topicId,
+  setTopicList,
+  setIsLoading,
+  setTopicTitle,
+  setTopicModel,
+  setTopicDescription,
+  setIsDescriptionChatVisible,
+  setSelectedTopicId,
+}) {
+  const handleDeleteClick = async (id) => {
+    setIsLoading(true);
+    const response = await deleteTopic(id);
+
+    if (response.success) {
+      setTopicList((prev) => prev.filter((topic) => topic.id !== id));
+    }
+    setIsLoading(false);
+  };
+
+  const handleClick = async (id) => {
+    setIsDescriptionChatVisible(false)
+    setSelectedTopicId(id);
+    setIsLoading(true);
+    const response = await getTopicById(id);
+    console.log(response)
+    if (response.success && response.data.topic_info) {
+      setTopicTitle(response.data.topic_info.title);
+      setTopicDescription(response.data.topic_info.description);
+      setTopicModel(response.data.topic_info.model);
+    }
+    setIsLoading(false);
+  };
   return isCollapsed ? null : (
-    <div className="cursor-pointer hover:bg-zinc-600 hover:text-focused flex items-center justify-start gap-3 rounded-xl p-3">
-      <Frame height={"20px"} width={"20px"} className="cursor-pointer" />
-      <p>{topicName}</p>
+    <div
+      className="group cursor-pointer hover:bg-zinc-600 hover:text-focused flex items-center justify-between gap-3 rounded-xl p-3"
+      onClick={() => {
+        handleClick(topicId);
+      }}
+    >
+      <div className="flex items-center justify-start gap-3">
+        <Frame height="20px" width="20px" />
+        <p>{topicName}</p>
+      </div>
+
+      <Trash2
+        className="text-white hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+        onClick={(e) => {
+           e.stopPropagation();
+          handleDeleteClick(topicId);
+        }}
+      />
     </div>
   );
 }
@@ -105,7 +195,11 @@ export function SideBarItem({ Icon, text, className, isCollapsed, onClick }) {
       )}
       onClick={onClick}
     >
-      <Icon height={"24px"} width={"24px"} className=" cursor-pointer"></Icon>
+      <Icon
+        height={"24px"}
+        width={"24px"}
+        className="cursor-pointer shrink-0"
+      ></Icon>
 
       {isCollapsed ? null : <p className="">{text}</p>}
     </div>

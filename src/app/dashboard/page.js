@@ -7,11 +7,24 @@ import { logOut } from "@/lib/logOut";
 import { Spinner } from "@/components/ui/spinner";
 import { Profile } from "./profile";
 import { cn } from "@/lib/utils";
-import {Main} from "@/app/dashboard/main"
+import { Main } from "@/app/dashboard/main";
 import { fetchUser } from "@/api/userApi";
+import { CreateTopicForm } from "./createTopicForm";
+import { DescriptionChat } from "./descriptionChat";
 
 export default function Dashboard() {
   const [isProfileVisible, setIsProfileVisible] = useState(false);
+  const [isCreateTopicFormVisible, setIsCreateTopicFormVisible] =
+    useState(false);
+
+  const [topicList, setTopicList] = useState([]);
+  const [topicTitle, setTopicTitle] = useState("");
+  const [topicDescription, setTopicDescription] = useState("");
+  const [topicModel, setTopicModel] = useState("");
+  const [selectedTopicId, setSelectedTopicId] = useState(null);
+  const [isDescriptionChatVisible, setIsDescriptionChatVisible] =
+    useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const handleLogOutClick = async () => {
     setIsLoading(true);
@@ -19,13 +32,12 @@ export default function Dashboard() {
     setIsLoading(false);
   };
 
-  
   return (
     <div className="relative w-screen h-screen bg-zinc-800 ">
       <div
         className={cn(
           " bg-zinc-800 inset-0 z-0 flex justify-between  h-screen  ",
-          isProfileVisible
+          isProfileVisible || isCreateTopicFormVisible
             ? "blur-[1px] brightness-60 pointer-events-none"
             : "brightness-100 blur-none pointer-events-auto"
         )}
@@ -33,8 +45,16 @@ export default function Dashboard() {
         {isLoading ? <Spinner /> : null}
 
         <SideBar
-          topicList={topicList}
           setIsProfileVisible={setIsProfileVisible}
+          setIsCreateTopicFormVisible={setIsCreateTopicFormVisible}
+          topicList={topicList}
+          setTopicList={setTopicList}
+          setIsLoading={setIsLoading}
+          setTopicTitle={setTopicTitle}
+          setTopicDescription={setTopicDescription}
+          setTopicModel={setTopicModel}
+          setIsDescriptionChatVisible={setIsDescriptionChatVisible}
+          setSelectedTopicId={setSelectedTopicId}
         />
         <div className={"flex flex-col h-full w-full px-8 gap-8"}>
           <div>
@@ -46,27 +66,31 @@ export default function Dashboard() {
               <LogOut />
             </div>
           </div>
-          <Main/>
-         
+          {isDescriptionChatVisible ? (
+            <DescriptionChat />
+          ) : (
+            <Main
+              topicTitle={topicTitle}
+              topicDescription={topicDescription}
+              topicModel={topicModel}
+              setIsDescriptionChatVisible={setIsDescriptionChatVisible}
+              selectedTopicId={selectedTopicId}
+              setTopicTitle={setTopicTitle}
+              setTopicList={setTopicList}
+            />
+          )}
         </div>
       </div>
       <Profile
         className={isProfileVisible ? "block" : "hidden"}
         setIsProfileVisible={setIsProfileVisible}
       />
+      <CreateTopicForm
+        className={isCreateTopicFormVisible ? "block" : "hidden"}
+        setIsCreateTopicFormVisible={setIsCreateTopicFormVisible}
+        topicList={topicList}
+        setTopicList={setTopicList}
+      />
     </div>
   );
 }
-
-const topicList = [
-  { topicName: "Introduction to Programming", id: "1" },
-  { topicName: "Variables and Data Types", id: "2" },
-  { topicName: "Conditional Statements", id: "3" },
-  { topicName: "Loops and Iterations", id: "4" },
-  { topicName: "Functions and Scope", id: "5" },
-  { topicName: "Arrays and Objects", id: "6" },
-  { topicName: "DOM Manipulation", id: "7" },
-  { topicName: "Event Handling in JavaScript", id: "8" },
-  { topicName: "Asynchronous JavaScript", id: "9" },
-  { topicName: "Introduction to React", id: "10" },
-];
