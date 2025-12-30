@@ -12,12 +12,14 @@ export function Profile({ className, setIsProfileVisible }) {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [email, setEmail] = useState("");
 
   // Reset message after 5 seconds
   useEffect(() => {
 
     setFirstName(localStorage.getItem("first_name"))
     setLastName(localStorage.getItem("last_name"))
+    setEmail(localStorage.getItem("email"));
     if (!message) return;
 
     const timer = setTimeout(() => {
@@ -27,7 +29,7 @@ export function Profile({ className, setIsProfileVisible }) {
     return () => clearTimeout(timer);
   }, [message]);
 
-  const email = localStorage.getItem("email");
+  
 
   const handleUpdateClick = async () => {
     setIsLoading(true);

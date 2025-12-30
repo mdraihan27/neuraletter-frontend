@@ -1,22 +1,10 @@
-"use client";
-import { LoginForm } from "@/app/login/login-form";
-import { SignupForm } from "@/app/register/signup-form";
+import { Suspense } from "react";
 import { Nav } from "@/components/ui/nav";
-import { GalleryVerticalEnd } from "lucide-react";
-import { DarkVeil } from "@/components/background/DarkVeil";
-import { Loader } from "@/components/ui/loader/loader";
-import { useState, useRef, useEffect } from "react";
-import React from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { FooterColumns01 } from "@/components/blocks/footer/footer-columns-01";
-import { ForgetPasswordVerificationForm } from "./forget-password-verification-form";
-import { useSearchParams } from "next/navigation";
+import { ForgetPasswordVerificationFormWrapper } from "./verify-wrapper";
 
 export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email");
-
   return (
     <div
       className="absolute inset-0 z-0 flex flex-col items-center "
@@ -25,24 +13,19 @@ export default function Login() {
           "radial-gradient(125% 125% at 50% 100%, #000000 40%, #0A1C57 100%)",
       }}
     >
-      {isLoading ? <Spinner /> : null}
-      {/* Your Content/Components */}
-      {/* <Loader isVisible={isLoading}></Loader> */}
+      <Suspense fallback={<Spinner />}>
+        <Nav
+          navItems={[]}
+          navButtons={[
+            { id: "login", navButtonName: "Login", redirectLink: "/" },
+            { id: "try", navButtonName: "Try Now", redirectLink: "/register" },
+          ]}
+          className="mx-auto"
+        />
 
-      <Nav
-        navItems={[]}
-        navButtons={[
-          { id: "login", navButtonName: "Login", redirectLink: "/" },
-          { id: "try", navButtonName: "Try Now", redirectLink: "/register" },
-        ]}
-        className="mx-auto"
-      ></Nav>
+        <ForgetPasswordVerificationFormWrapper />
+      </Suspense>
 
-      <ForgetPasswordVerificationForm
-        email={email}
-        className={"w-[400px] mt-60 mb-44 scale-130 "}
-        setIsLoading={setIsLoading}
-      ></ForgetPasswordVerificationForm>
       <FooterColumns01 />
     </div>
   );
