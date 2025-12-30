@@ -1,6 +1,8 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
-import { SquarePen, Frame } from "lucide-react";
+import { SquarePen, Frame, X } from "lucide-react";
 import { updateTopic } from "@/api/topicApi";
+import { getUpdates } from "@/api/updateApi";
 
 export function Main({
   topicTitle,
@@ -17,16 +19,35 @@ export function Main({
   const [isSavingTitle, setIsSavingTitle] = useState(false);
   const titleInputRef = useRef(null);
 
-  useEffect(() => {
-    setTitleDraft(topicTitle);
-  }, [topicTitle]);
+  const [updates, setUpdates] = useState([]);
+  const [selectedUpdate, setSelectedUpdate] = useState(null);
+
+  // const handleSendClick = .
+
+  // useEffect(() => {
+  //   setTitleDraft(chatList);
+  // }, [chatList]);
 
   useEffect(() => {
+    const fetchUpdates = async () => {
+      console.log("Use")
+      if (!selectedTopicId) return;
+      const response = await getUpdates(selectedTopicId);
+      console.log(response);
+      if (response.success && Array.isArray(response.data?.updates)) {
+        setUpdates(response.data.updates);
+      } else {
+        setUpdates([]);
+      }
+    };
+
+    fetchUpdates();
+
     if (isEditingTitle && titleInputRef.current) {
       titleInputRef.current.focus();
       titleInputRef.current.select();
     }
-  }, [isEditingTitle]);
+  }, [isEditingTitle, selectedTopicId]);
 
   const handleStartEditing = () => {
     if (!selectedTopicId || isSavingTitle) return;
@@ -96,7 +117,7 @@ export function Main({
       <div className="flex flex-col gap-6">
         <div className="flex bg-[#1f1f1f] w-full justify-between items-center p-6 rounded-xl text-white ">
           <div className="flex items-center h-full justify-start gap-4">
-            <Frame/>
+            <Frame />
             {isEditingTitle ? (
               <input
                 ref={titleInputRef}
@@ -136,7 +157,7 @@ export function Main({
             <div>
               <div className="flex justify-start">
                 <p className="font-bold bg-linear-to-r from-orange-400 via-orange-700 to-red-500 text-transparent bg-clip-text text-2xl">
-                 {topicModel}
+                  {topicModel}
                 </p>
               </div>
               <p className="pe-6">
@@ -152,7 +173,31 @@ export function Main({
         <div className="w-full flex flex-col gap-6">
           <div className="bg-linear-45 from-[#92adff30]  to-[#1f1f1f50] rounded-xl w-full px-6 py-5 h-full text-2xl flex flex-col gap-3">
             <p className="text-sm">Upcoming Updates</p>
-            <div></div>
+            <div className="flex flex-col gap-2 text-base max-h-64 overflow-y-auto pr-2">
+              {updates.length === 0 && (
+                <p className="text-sm text-zinc-400">No updates yet.</p>
+              )}
+              {updates.map((update) => {
+                const createdDate = update.created_at
+                  ? new Date(update.created_at).toLocaleString()
+                  : "Unknown date";
+                const title = update.title || "Untitled update";
+                const shortTitle =
+                  title.length > 40 ? `${title.slice(0, 40)}...` : title;
+
+                return (
+                  <button
+                    key={update.id}
+                    type="button"
+                    className="w-full text-left px-3 py-2 rounded-lg bg-[#1f1f1f90] hover:bg-[#2b2b2b] transition-colors border border-transparent hover:border-focused/60"
+                    onClick={() => setSelectedUpdate(update)}
+                  >
+                    <p className="text-xs text-zinc-400 mb-1">{createdDate}</p>
+                    <p className="text-sm font-medium truncate">{shortTitle}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
           <div className="text-2xl rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
             <p className="text-sm">Due Charge</p>
@@ -170,6 +215,55 @@ export function Main({
           Generate Description <SquarePen />
         </button>
       </div>
+
+      {selectedUpdate && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
+          <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-xl w-full mx-4 p-6 flex flex-col gap-4 border border-[#92adff40]">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col gap-1">
+                <p className="text-xs text-zinc-400">
+                  {selectedUpdate.created_at
+                    ? new Date(selectedUpdate.created_at).toLocaleString()
+                    : "Unknown date"}
+                </p>
+                <h2 className="text-xl font-semibold">
+                  {selectedUpdate.title || "Untitled update"}
+                </h2>
+              </div>
+              <button
+                type="button"
+                className="p-1 rounded-full hover:bg-zinc-800 text-zinc-400 hover:text-white"
+                onClick={() => setSelectedUpdate(null)}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {Array.isArray(selectedUpdate.key_points) &&
+            selectedUpdate.key_points.length > 0 ? (
+              <ul className="list-disc list-inside text-sm text-zinc-200 space-y-1">
+                {selectedUpdate.key_points.map((point, index) => (
+                  <li key={index}>{point}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-zinc-400">
+                No key points available for this update.
+              </p>
+            )}
+
+            {selectedUpdate.image_link && (
+              <div className="mt-2">
+                <img
+                  src={selectedUpdate.image_link}
+                  alt={selectedUpdate.title || "Update image"}
+                  className="w-full h-48 object-cover rounded-xl border border-zinc-800"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

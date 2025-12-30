@@ -26,12 +26,18 @@ export function SideBar({
   setSelectedTopicId,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [firstName, setFirstName] = useState(
-    localStorage.getItem("first_name")
-  );
+  const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedName = localStorage.getItem("first_name");
+      if (storedName) {
+        setFirstName(storedName);
+      }
+    }
+
     const getTopicList = async () => {
+      setIsLoading(true)
       const response = await getUserTopics();
       console.log(response);
       if (response.success && response.data.topics) {
@@ -39,6 +45,7 @@ export function SideBar({
       } else {
         setTopicList([]);
       }
+      setIsLoading(false)
     };
 
     getTopicList();

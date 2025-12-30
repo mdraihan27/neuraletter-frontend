@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -6,16 +7,17 @@ import { Spinner } from "@/components/ui/spinner";
 import { sendPasswordResetCode } from "@/api/passwordResetApi";
 import { redirect } from "next/navigation";
 export function Profile({ className, setIsProfileVisible }) {
-  const [firstName, setFirstName] = useState(
-    localStorage.getItem("first_name")
-  );
-  const [lastName, setLastName] = useState(localStorage.getItem("last_name"));
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   // Reset message after 5 seconds
   useEffect(() => {
+
+    setFirstName(localStorage.getItem("first_name"))
+    setLastName(localStorage.getItem("last_name"))
     if (!message) return;
 
     const timer = setTimeout(() => {

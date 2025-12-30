@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -25,7 +26,7 @@ export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicL
     if (result.success) {
       setIsError(false);
       setMessage(result.data.message);
-     setTopicList(prev => [...prev, result.data.topic]);
+     setTopicList(prev => [result.data.topic, ...prev]);
     } else {
       setIsError(true);
       setMessage(result.error);

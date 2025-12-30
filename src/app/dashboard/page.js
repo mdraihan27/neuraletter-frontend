@@ -1,5 +1,5 @@
 "use client";
-import { LogOut } from "lucide-react";
+import { LogOut, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import React from "react";
 import { SideBar } from "./sidebar";
@@ -23,7 +23,7 @@ export default function Dashboard() {
   const [topicModel, setTopicModel] = useState("");
   const [selectedTopicId, setSelectedTopicId] = useState(null);
   const [isDescriptionChatVisible, setIsDescriptionChatVisible] =
-    useState(false);
+    useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
   const handleLogOutClick = async () => {
@@ -56,29 +56,36 @@ export default function Dashboard() {
           setIsDescriptionChatVisible={setIsDescriptionChatVisible}
           setSelectedTopicId={setSelectedTopicId}
         />
-        <div className={"flex flex-col h-full w-full px-8 gap-8"}>
+        <div className="flex flex-col h-screen w-full px-8 gap-8">
           <div>
             <div
-              className="text-white flex items-center justify-end gap-3 pt-6 cursor-pointer hover:text-focused"
-              onClick={handleLogOutClick}
+              className="text-white flex items-center justify-between gap-3 pt-6 "
+              
             >
-              <p>Log Out</p>
-              <LogOut />
+            <ArrowLeft className={cn("rounded-full bg-zinc-700 p-2 cursor-pointer hover:bg-[#97adff60]" , isDescriptionChatVisible? "block" : "invisible")} width={40} height={40} onClick={()=>{
+              setIsDescriptionChatVisible(false)
+            }}/>
+              <div onClick={handleLogOutClick} className="flex justify-center gap-3 items-center hover:text-focused cursor-pointer ">
+                <p>Log Out</p>
+                <LogOut />
+              </div>
             </div>
           </div>
-          {isDescriptionChatVisible ? (
-            <DescriptionChat />
-          ) : (
-            <Main
-              topicTitle={topicTitle}
-              topicDescription={topicDescription}
-              topicModel={topicModel}
-              setIsDescriptionChatVisible={setIsDescriptionChatVisible}
-              selectedTopicId={selectedTopicId}
-              setTopicTitle={setTopicTitle}
-              setTopicList={setTopicList}
-            />
-          )}
+          <div className="flex-1 min-h-0">
+            {isDescriptionChatVisible ? (
+              <DescriptionChat topicId={selectedTopicId} />
+            ) : (
+              <Main
+                topicTitle={topicTitle}
+                topicDescription={topicDescription}
+                topicModel={topicModel}
+                setIsDescriptionChatVisible={setIsDescriptionChatVisible}
+                selectedTopicId={selectedTopicId}
+                setTopicTitle={setTopicTitle}
+                setTopicList={setTopicList}
+              />
+            )}
+          </div>
         </div>
       </div>
       <Profile
