@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <div className="w-screen flex justify-center">
-      <div className="max-w-[1920px]">
+      <div className="">
         <Nav
           navItems={[
             { id: "home", navItemName: "Home", targetRef: homeRef, offset: 0 },
@@ -151,14 +151,11 @@ export default function Home() {
             </div>
           </AuroraBackground>
 
-          <div className="mt-5 flex flex-col items-center" ref={featureRef}>
-            {/* <GradientText
-          text="Features"
-          gradient="linear-gradient(90deg, #92adff 0%, #ffffff 50%, #92adff 100%)"
-          className="absolute z-40 mt-10 text-3xl font-bold"
-        /> */}
-            {/* <h3 className="absolute z-40 mt-10 text-3xl font-bold bg-linear-to-r from-gray-500 via-[#ffffff] to-gray-500 text-transparent bg-clip-text" >How does it work?</h3> */}
-            <h4 className="text-white text-3xl absolute z-40 mt-4">
+          <div
+            className="mt-36 flex flex-col items-center relative"
+            ref={featureRef}
+          >
+            <h4 className="text-white text-3xl z-40 ">
               How does it work?
             </h4>
 
@@ -166,11 +163,11 @@ export default function Home() {
               <InfiniteMovingCards
                 direction="left"
                 speed="slow"
-                className="mt-8"
+                className=""
                 pauseOnHover={false}
               ></InfiniteMovingCards>
             </LampContainer>
-            <div className="flex gap-10 absolute mt-[720px]">
+            <div className="flex gap-10 absolute top-[700px]">
               <ItemCard text={"Explain your interests"} ItemIcon={Brain} />
               <ItemCard text={"Choose update frequency"} ItemIcon={Clock} />
               <ItemCard text={"AI researches for you 24/7"} ItemIcon={Search} />
