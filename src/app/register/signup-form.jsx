@@ -98,7 +98,7 @@ export function SignupForm({ className, setIsLoading, error, ...props }) {
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="name">Hossen</FieldLabel>
+                  <FieldLabel htmlFor="name">Last Name</FieldLabel>
                   <Input
                     id="name"
                     type="text"
