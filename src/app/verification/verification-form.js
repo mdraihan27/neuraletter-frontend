@@ -93,12 +93,13 @@ export function VerificationForm({ className, email, setIsLoading, ...props }) {
 
                 <FieldDescription className="flex justify-start gap-2">
                   Didn&apos;t get the code?{" "}
-                  <p
+                  <button
+                    type="button"
                     className="underline font-semibold text-white cursor-pointer hover:text-gray-300"
                     onClick={handleResendClick}
                   >
                     Resend Code
-                  </p>
+                  </button>
                 </FieldDescription>
               </Field>
             </FieldGroup>
