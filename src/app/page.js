@@ -6,6 +6,7 @@ import { Nav } from "@/components/ui/nav";
 import { Button } from "@/components/ui/imported/button";
 import { useState, useRef, useEffect } from "react";
 import React from "react";
+import Link from "next/link";
 
 import { LampContainer } from "@/components/ui/imported/lamp";
 import { InfiniteMovingCards } from "@/components/ui/imported/infinite-moving-cards";
@@ -80,7 +81,7 @@ export default function Home() {
                 }
               >
                 <textarea
-                  className="bg-[#ffffff0] w-[600px] h-[100px] absolute text-xl text-[#ffffff75] resize-none mt-9 focus:outline-none"
+                  className="bg-[#ffffff0] w-[600px] h-[100px] absolute text-xl text-[#ffffff75] resize-none mt-9 focus:outline-none z-50"
                   autoFocus
                   onChange={(e) => {
                     setIsTyping(e.target.value.length > 0);
@@ -125,16 +126,18 @@ export default function Home() {
                       </select> */}
                     </div>
 
-                    <Button className="bg-focused hover:bg-hover-focused text-black items-center rounded-[30px] flex justify-center gap-2 w-[110px] h-[50px] text-[18px] font-medium">
-                      <p className="ms-1">Try</p>
-                      <img
-                        src="/images/icons/arrow_forward2.svg"
-                        alt="Scroll down"
-                        width={24}
-                        height={24}
-                        className="text-black invert"
-                      />
-                    </Button>
+                    <Link href="/register" className="cursor-pointer z-50">
+                      <Button className="bg-focused hover:bg-hover-focused text-black items-center rounded-[30px] flex justify-center gap-2 w-[110px] h-[50px] text-[18px] font-medium cursor-pointer">
+                        <p className="ms-1">Try</p>
+                        <img
+                          src="/images/icons/arrow_forward2.svg"
+                          alt="Go to signup"
+                          width={24}
+                          height={24}
+                          className="text-black invert"
+                        />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>

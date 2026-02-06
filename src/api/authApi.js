@@ -8,7 +8,7 @@ export async function login(email, password) {
       "/auth/login",
       { email, password },
       {
-        validateStatus: () => true, // ✅ prevent Axios from throwing
+        validateStatus: () => true, 
       }
     );
 
@@ -49,7 +49,7 @@ export async function signup(first_name, last_name, email, password) {
       "/auth/signup",
       { first_name, last_name, email, password },
       {
-        validateStatus: () => true, // ✅ allow all status codes
+        validateStatus: () => true, 
       }
     );
 

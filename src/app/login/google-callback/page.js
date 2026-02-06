@@ -51,7 +51,6 @@ export default function GoogleCallback() {
       }}
     >
       {isLoading ? <Spinner /> : null}
-      {/* Your Content/Components */}
       {/* <Loader isVisible={isLoading}></Loader> */}
 
       <Nav

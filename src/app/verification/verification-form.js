@@ -77,7 +77,7 @@ export function VerificationForm({ className, email, setIsLoading, ...props }) {
                   type="number"
                   placeholder=""
                   required
-                  value={verificationCode} // bind value to state
+                  value={verificationCode} 
                   onChange={(e) => setVerificationCode(e.target.value)}
                 />
               </Field>

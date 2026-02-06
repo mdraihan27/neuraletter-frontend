@@ -23,7 +23,6 @@ export function DescriptionChat({ topicId }) {
       if (response.success && Array.isArray(response.data?.topic_chats)) {
         setTopicChats(response.data.topic_chats);
       } else {
-        // Ensure we always keep topicChats as an array
         setTopicChats([]);
       }
     };
@@ -44,7 +43,6 @@ export function DescriptionChat({ topicId }) {
 
     setUserMessage("");
 
-    // Optimistically add the user's message
     setTopicChats((prev) => {
       const safePrev = Array.isArray(prev) ? prev : [];
       return [
@@ -112,7 +110,7 @@ export function UserMessage({ messageText }) {
   return (
     <div className="w-full flex justify-between mb-5">
       <div></div>
-      <div className="bg-[#97adff60] text-lg rounded-full px-6 py-3 max-w-2/3">
+      <div className="bg-[#97adff60] text-lg rounded-xl px-6 py-3 max-w-2/3">
         <p>{messageText}</p>
       </div>
     </div>
@@ -122,7 +120,7 @@ export function UserMessage({ messageText }) {
 export function AiMessage({ messageText }) {
   return (
     <div className="w-full  flex justify-between mb-5">
-      <div className="bg-gray-700/70 text-lg rounded-full px-6 py-3 max-w-2/3">
+      <div className="bg-gray-700/70 text-lg rounded-xl px-6 py-3 max-w-2/3">
         <p>{messageText}</p>
       </div>
       <div></div>

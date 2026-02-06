@@ -31,7 +31,6 @@ export default function Register() {
           "radial-gradient(125% 125% at 50% 100%, #000000 40%, #0A1C57 100%)",
       }}
     >
-      {/* Your Content/Components */}
       {isLoading ? <Spinner /> : null}
 
       <Nav

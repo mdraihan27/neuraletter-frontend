@@ -43,7 +43,6 @@ export async function chatWithAi(topic_id, message) {
     console.log(topic_id+" "+message )
     const token = Cookies.get("access_token");
 
-    // Assuming chat with AI is a POST with JSON body
     const response = await apiClient.post(
       `/ai/chat`,
       {

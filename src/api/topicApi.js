@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import apiClient from "./apiClient";
 
-/* CREATE TOPIC */
 export async function createTopic(title, tier, model) {
   try {
     console.log(model)
@@ -36,7 +35,6 @@ export async function createTopic(title, tier, model) {
   }
 }
 
-/* GET ALL TOPICS FOR CURRENT USER */
 export async function getUserTopics() {
   try {
     const token = Cookies.get("access_token");
@@ -66,7 +64,6 @@ export async function getUserTopics() {
   }
 }
 
-/* GET TOPIC BY ID */
 export async function getTopicById(topicId) {
   try {
     const token = Cookies.get("access_token");
@@ -96,7 +93,6 @@ export async function getTopicById(topicId) {
   }
 }
 
-/* DELETE TOPIC BY ID */
 export async function deleteTopic(topicId) {
   try {
     const token = Cookies.get("access_token");
@@ -126,9 +122,7 @@ export async function deleteTopic(topicId) {
   }
 }
 
-/* UPDATE TOPIC BY ID */
 export async function updateTopic(topicId, updates) {
-  // updates can include: { title, tier, model }
   try {
     const token = Cookies.get("access_token");
 

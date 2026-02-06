@@ -69,7 +69,7 @@ export function ForgetPasswordForm({ className, setIsLoading, ...props }) {
                   type="text"
                   placeholder="raihan@example.com"
                   required
-                  value={email} // bind value to state
+                  value={email} 
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Field>

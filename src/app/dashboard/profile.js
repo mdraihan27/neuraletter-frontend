@@ -14,7 +14,6 @@ export function Profile({ className, setIsProfileVisible }) {
   const [isError, setIsError] = useState(false);
   const [email, setEmail] = useState("");
 
-  // Reset message after 5 seconds
   useEffect(() => {
 
     setFirstName(localStorage.getItem("first_name"))

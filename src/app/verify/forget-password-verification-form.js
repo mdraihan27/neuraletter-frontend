@@ -71,7 +71,7 @@ export function ForgetPasswordVerificationForm({ className, email, setIsLoading,
                   type="text"
                   placeholder="secret code"
                   required
-                  value={verificationCode} // bind value to state
+                  value={verificationCode} 
                   onChange={(e) => setVerificationCode(e.target.value)}
                 />
               </Field>

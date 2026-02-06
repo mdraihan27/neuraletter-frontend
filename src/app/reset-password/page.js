@@ -24,7 +24,6 @@ export default function Login() {
       }}
     >
       {isLoading ? <Spinner/> : null}
-      {/* Your Content/Components */}
       {/* <Loader isVisible={isLoading}></Loader> */}
 
       <Nav

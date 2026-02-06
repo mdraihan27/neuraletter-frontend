@@ -8,7 +8,7 @@ export async function sendVerificationCode() {
     const token = Cookies.get("access_token")
     const response = await apiClient.post(
       "/user/verification/code",
-      {}, // empty body
+      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export async function verifyVerificationCode(verification_code) {
     const token = Cookies.get("access_token")
    const response = await apiClient.post(
       "/user/verification/verify",
-      {verification_code}, // empty body
+      {verification_code}, 
       {
         headers: {
           Authorization: `Bearer ${token}`,

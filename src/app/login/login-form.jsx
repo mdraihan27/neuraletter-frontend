@@ -28,7 +28,6 @@ export function LoginForm({ className, setIsLoading, error, ...props }) {
   const [message, setMessage] = useState(error);
   // const [isLoading, setIsLoading] = useState(false);
 
-  // Keep message in sync with updated error props (e.g., query string error)
   useEffect(() => {
     setMessage(error);
   }, [error]);
@@ -93,7 +92,7 @@ export function LoginForm({ className, setIsLoading, error, ...props }) {
                   type="email"
                   placeholder="raihan@example.com"
                   required
-                  value={email} // bind value to state
+                  value={email} 
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Field>
