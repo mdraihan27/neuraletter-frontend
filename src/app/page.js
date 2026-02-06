@@ -107,8 +107,8 @@ export default function Home() {
                   />
 
                   <div className="flex justify-between  items-center mb-7 ">
-                    <div className="w-[150px] h-[30px] flex items-center bg-[#202020] rounded-sm ">
-                      <select
+                    <div className="w-[150px] h-[30px] flex items-center rounded-sm ">
+                      {/* <select
                         id="frequency"
                         name="frequency"
                         className="bg-[#202020] w-[140px] px-3 text-gray-400 rounded-full focus:outline-none focus:border-none border-none"
@@ -122,7 +122,7 @@ export default function Home() {
                         <option value="6">6 Days</option>
                         <option value="7">1 Week</option>
                         <option value="custom">Custom</option>
-                      </select>
+                      </select> */}
                     </div>
 
                     <Button className="bg-focused hover:bg-hover-focused text-black items-center rounded-[30px] flex justify-center gap-2 w-[110px] h-[50px] text-[18px] font-medium">
@@ -195,7 +195,7 @@ export default function Home() {
                 planName={"Free"}
                 comment={"Perfect for trying Neuraletter"}
                 price={"0"}
-                features={["Analysis by free LLM models", "One topic per user"]}
+                features={["Analysis by free LLM models", "Unlimited topics per user"]}
               />
               <div className="flex flex-col items-center mb-[25px] rounded-2xl ">
                 <p className="mb-[2px] z-60 text-white font-semibold">
@@ -203,24 +203,24 @@ export default function Home() {
                 </p>
 
                 <PricingCard
-                  planName={"Pro"}
+                  planName={"Pro (coming soom)"}
                   comment={"Perfect for professional research"}
                   price={"1.99"}
                   features={[
                     "Analysis by pro LLM models",
-                    "5 topics per user",
+                    "Unlimited topics per user",
                     "24/7 support",
                     "Cancel anytime",
                   ]}
                 />
               </div>
               <PricingCard
-                planName={"Pro Plus"}
+                planName={"Pro Plus (coming soon)"}
                 comment={"Perfect if research earns you money"}
                 price={"9.99"}
                 features={[
                   "Analysis by pro LLM models",
-                  "No topic limits",
+                  "Unlimited topics per user",
                   "Get discounts as you go",
                   "24/7 support",
                   "Cancel anytime",

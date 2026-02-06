@@ -2,7 +2,7 @@
 import { SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/imported/button";
 import TypingText from "@/components/ui/shadcn-io/typing-text/index";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiChatInput } from "@/components/ui/ai-chat-input";
 import { Spinner } from "@/components/ui/spinner";
 import { JustSpinner } from "@/components/ui/just-spinner";
@@ -14,6 +14,7 @@ export function DescriptionChat({ topicId }) {
   const [isThinking, setIsThinking] = useState(false);
   const [topicChats, setTopicChats] = useState([]);
   const [userMessage, setUserMessage] = useState("");
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     const getChat = async (topicId) => {
@@ -30,10 +31,18 @@ export function DescriptionChat({ topicId }) {
     getChat(topicId);
   }, [topicId]);
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [topicChats, isThinking]);
+
   const handleSendClick = async (message) => {
     if (!message) return;
 
     console.log(message)
+
+    setUserMessage("");
 
     // Optimistically add the user's message
     setTopicChats((prev) => {
@@ -46,6 +55,7 @@ export function DescriptionChat({ topicId }) {
     console.log(message+"2")
     setIsThinking(true);
     const response = await chatWithAi(topicId, message);
+    console.log(response);
 
     if (response.success && response.data.ai_message) {
       setTopicChats((prev) => [
@@ -59,7 +69,10 @@ export function DescriptionChat({ topicId }) {
 
   return (
     <div className="text-white flex flex-col gap-6 h-full text-xl pb-20 relative">
-      <div className="w-full px-20 flex flex-col gap-4 flex-1 min-h-0 chat-scroll chat-fade py-40">
+      <div
+        ref={chatContainerRef}
+        className="w-full px-20 flex flex-col gap-4 flex-1 min-h-0 chat-scroll chat-fade py-40"
+      >
         {topicChats.map((topicChat, index) => {
           console.log(topicChat);
           if (topicChat.sent_by_user) {
@@ -109,7 +122,7 @@ export function UserMessage({ messageText }) {
 export function AiMessage({ messageText }) {
   return (
     <div className="w-full  flex justify-between mb-5">
-      <div className=" text-lg rounded-full px-6 py-3 max-w-2/3">
+      <div className="bg-gray-700/70 text-lg rounded-full px-6 py-3 max-w-2/3">
         <p>{messageText}</p>
       </div>
       <div></div>

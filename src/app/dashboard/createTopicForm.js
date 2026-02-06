@@ -7,8 +7,8 @@ import { createTopic } from "@/api/topicApi";
 
 export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicList, setTopicList }) {
   const [topicTitle, setTopicTitle] = useState("");
-  const [topicTier, setTopicTier] = useState("");
-  const [topicModel, setTopicModel] = useState("");
+  const [topicTier, setTopicTier] = useState("free");
+  const [topicModel, setTopicModel] = useState("mistral-large-2512");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -74,18 +74,10 @@ export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicL
               className="bg-transparent focus:outline-none text-lg"
               value={topicTier}
               onChange={(e) => setTopicTier(e.target.value)}
+              disabled
             >
-              <option value="" disabled hidden className="">
-                Select a tier
-              </option>
               <option className="text-black" value="free">
                 Free
-              </option>
-              <option className="text-black" value="pro">
-                Pro
-              </option>
-              <option className="text-black" value="pay_as_you_go">
-                Pay as you go
               </option>
             </select>
           </div>
@@ -96,18 +88,10 @@ export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicL
               className="bg-transparent focus:outline-none text-lg"
               value={topicModel}
               onChange={(e) => setTopicModel(e.target.value)}
+              disabled
             >
-              <option value="" disabled hidden>
-                Select a model
-              </option>
               <option className="text-black" value="mistral-large-2512">
                 Mistral Large 3
-              </option>
-              <option className="text-black" value="gpt-4o">
-                Mistral Small 2
-              </option>
-              <option className="text-black" value="claude-3.5-sonnet">
-                Gemini 2.5 Flash
               </option>
             </select>
           </div>

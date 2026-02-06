@@ -119,11 +119,7 @@ export function SideBar({
       </div>
 
       <div className="gap-1">
-        <SideBarItem
-          Icon={Settings}
-          text={"Settings"}
-          isCollapsed={isCollapsed}
-        />
+        
         <SideBarItem
           Icon={UserRoundCog}
           text={firstName}

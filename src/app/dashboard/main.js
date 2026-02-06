@@ -22,6 +22,24 @@ export function Main({
   const [updates, setUpdates] = useState([]);
   const [selectedUpdate, setSelectedUpdate] = useState(null);
 
+  const [timeToNextUpdate, setTimeToNextUpdate] = useState(null);
+
+  const validUpdateTimestamps = updates
+    .map((update) => update.created_at)
+    .filter((value) => value !== null && value !== undefined)
+    .map((value) => new Date(value).getTime())
+    .filter((time) => !Number.isNaN(time));
+
+  const latestUpdateTimestamp =
+    validUpdateTimestamps.length > 0
+      ? Math.max(...validUpdateTimestamps)
+      : null;
+
+  const latestUpdateDate =
+    latestUpdateTimestamp !== null
+      ? new Date(latestUpdateTimestamp).toLocaleDateString()
+      : null;
+
   // const handleSendClick = .
 
   // useEffect(() => {
@@ -48,6 +66,41 @@ export function Main({
       titleInputRef.current.select();
     }
   }, [isEditingTitle, selectedTopicId]);
+
+  useEffect(() => {
+    if (latestUpdateTimestamp === null) {
+      setTimeToNextUpdate(null);
+      return;
+    }
+
+    const targetTime = latestUpdateTimestamp + 24 * 60 * 60 * 1000;
+
+    const updateTimer = () => {
+      const now = Date.now();
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        setTimeToNextUpdate("00h 00m 00s");
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      const pad = (n) => String(n).padStart(2, "0");
+
+      setTimeToNextUpdate(
+        `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`
+      );
+    };
+
+    updateTimer();
+    const intervalId = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [latestUpdateTimestamp]);
 
   const handleStartEditing = () => {
     if (!selectedTopicId || isSavingTitle) return;
@@ -150,7 +203,9 @@ export function Main({
         <div className="w-full flex flex-col gap-6">
           <div className="bg-linear-45 from-[#92adff30]  to-[#1f1f1f50] rounded-xl w-full px-6 py-5 flex flex-col  gap-3">
             <p className="text-sm">Last Letter Sent</p>
-            <p className="text-2xl font-medium ">10 December, 25</p>
+            <p className="text-2xl font-medium ">
+              {latestUpdateDate || "No letters sent yet"}
+            </p>
           </div>
           <div className=" rounded-xl h-full w-full px-6 py-5  leading-10 font-medium flex flex-col  bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] gap-3">
             <p className="text-sm">Model Used</p>
@@ -170,10 +225,10 @@ export function Main({
           </div>
         </div>
 
-        <div className="w-full flex flex-col gap-6">
+        <div className="w-full flex flex-col gap-6 h-full">
           <div className="bg-linear-45 from-[#92adff30]  to-[#1f1f1f50] rounded-xl w-full px-6 py-5 h-full text-2xl flex flex-col gap-3">
             <p className="text-sm">Upcoming Updates</p>
-            <div className="flex flex-col gap-2 text-base max-h-64 overflow-y-auto pr-2">
+            <div className="flex flex-col gap-2 text-base max-h-64 overflow-y-auto pr-2 scrollbar-hide">
               {updates.length === 0 && (
                 <p className="text-sm text-zinc-400">No updates yet.</p>
               )}
@@ -200,8 +255,12 @@ export function Main({
             </div>
           </div>
           <div className="text-2xl rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
-            <p className="text-sm">Due Charge</p>
-            <p>$3</p>
+            <p className="text-sm">Next Update In</p>
+            <p>
+              {latestUpdateTimestamp
+                ? timeToNextUpdate || "Calculating..."
+                : "No updates yet"}
+            </p>
           </div>
         </div>
       </div>
@@ -239,16 +298,9 @@ export function Main({
               </button>
             </div>
 
-            {Array.isArray(selectedUpdate.key_points) &&
-            selectedUpdate.key_points.length > 0 ? (
-              <ul className="list-disc list-inside text-sm text-zinc-200 space-y-1">
-                {selectedUpdate.key_points.map((point, index) => (
-                  <li key={index}>{point}</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-zinc-400">
-                No key points available for this update.
+            {selectedUpdate.summary && (
+              <p className="text-sm text-zinc-200">
+                {selectedUpdate.summary}
               </p>
             )}
 
