@@ -19,16 +19,17 @@ function SelectValue({ ...props }) {
 }
 
 function SelectTrigger({
-  className = "w-[400px]",
-  size = "300px",
+  className,
   children,
   ...props
 }) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
-      // data-size={size}
-      className={cn("flex w-[400px] px-3 focus:border-1", className)}
+      className={cn(
+        "flex w-full items-center justify-between gap-2 rounded-md outline-none",
+        className
+      )}
       {...props}
     >
       {children}
@@ -51,7 +52,7 @@ function SelectContent({
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "w-[400px]",
+          "z-50 min-w-(--radix-select-trigger-width) overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-md",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className
@@ -65,7 +66,7 @@ function SelectContent({
           className={cn(
             "p-1",
             position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+              "h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width) scroll-my-1"
           )}
         >
           {children}
@@ -81,7 +82,7 @@ function SelectLabel({ className, ...props }) {
     <SelectPrimitive.Label
       data-slot="select-label"
       className={cn(
-        "text-muted-foreground px-2 py-1.5 text-sm w-[400px] ",
+        "text-muted-foreground px-2 py-1.5 text-sm",
         className
       )}
       {...props}
@@ -93,10 +94,13 @@ function SelectItem({ className, children, ...props }) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
-      className={cn("", className)}
+      className={cn(
+          "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-focused data-highlighted:text-zinc-900",
+        className
+      )}
       {...props}
     >
-      <span className="absolute right-2 flex size-3.5 items-center justify-center text-gray-300 hover:text-gray-300 hover:bg-focused hover:border-none w-[400px]">
+      <span className="absolute right-2 flex size-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
           <CheckIcon className="size-4" />
         </SelectPrimitive.ItemIndicator>

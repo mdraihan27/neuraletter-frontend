@@ -173,7 +173,7 @@ export default function Home() {
             <div className="flex gap-10 absolute top-[700px]">
               <ItemCard text={"Explain your interests"} ItemIcon={Brain} />
               <ItemCard text={"Choose update frequency"} ItemIcon={Clock} />
-              <ItemCard text={"AI researches for you 24/7"} ItemIcon={Search} />
+              <ItemCard text={"AI researches for you "} ItemIcon={Search} />
               <ItemCard text={"Summaries in your inbox"} ItemIcon={Mail} />
             </div>
           </div>
@@ -201,7 +201,7 @@ export default function Home() {
                 features={["Analysis by free LLM models", "Unlimited topics per user"]}
               />
               <div className="flex flex-col items-center mb-[25px] rounded-2xl ">
-                <p className="mb-[2px] z-60 text-white font-semibold">
+                <p className="mb-[2px] z-30 text-white font-semibold">
                   Most Popular
                 </p>
 

@@ -22,20 +22,18 @@ export function SideBar({
   setTopicTitle,
   setTopicDescription,
   setTopicModel,
+  setTopicUpdateFrequencyHours,
+  setTopicNextUpdateTime,
   setIsDescriptionChatVisible,
   setSelectedTopicId,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [firstName, setFirstName] = useState("");
+  const [firstName] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return localStorage.getItem("first_name") || "";
+  });
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedName = localStorage.getItem("first_name");
-      if (storedName) {
-        setFirstName(storedName);
-      }
-    }
-
     const getTopicList = async () => {
       setIsLoading(true)
       const response = await getUserTopics();
@@ -109,6 +107,8 @@ export function SideBar({
                   setTopicTitle={setTopicTitle}
                   setTopicDescription={setTopicDescription}
                   setTopicModel={setTopicModel}
+                  setTopicUpdateFrequencyHours={setTopicUpdateFrequencyHours}
+                  setTopicNextUpdateTime={setTopicNextUpdateTime}
                   setIsDescriptionChatVisible={setIsDescriptionChatVisible}
                   setSelectedTopicId={setSelectedTopicId}
                 ></Topic>
@@ -140,6 +140,8 @@ export function Topic({
   setTopicTitle,
   setTopicModel,
   setTopicDescription,
+  setTopicUpdateFrequencyHours,
+  setTopicNextUpdateTime,
   setIsDescriptionChatVisible,
   setSelectedTopicId,
 }) {
@@ -163,6 +165,10 @@ export function Topic({
       setTopicTitle(response.data.topic_info.title);
       setTopicDescription(response.data.topic_info.description);
       setTopicModel(response.data.topic_info.model);
+      setTopicUpdateFrequencyHours(
+        response.data.topic_info.update_frequency_hours ?? null
+      );
+      setTopicNextUpdateTime(response.data.topic_info.next_update_time ?? null);
     }
     setIsLoading(false);
   };

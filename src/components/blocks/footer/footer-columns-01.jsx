@@ -1,32 +1,21 @@
 "use client";
 
-import { Github, Instagram, Twitter, Youtube } from "lucide-react";
-import { Button } from "@/components/ui/imported/button";
+import { Github, Linkedin, Heart } from "lucide-react";
 
 
 const LINKS = [
-  {
-    title: "Company",
-    items: [
-      { title: "About Us", href: "#" },
-      { title: "Careers", href: "#" },
-    ],
-  },
+  
   {
     title: "Pages",
     items: [
-      { title: "Login", href: "#" },
-      { title: "Register", href: "#" },
-      { title: "Pricing", href: "#" },
+      { title: "Login", href: "/login" },
+      { title: "Register", href: "/register" },
     ],
   },
   {
     title: "Legal",
     items: [
-      { title: "Terms", href: "#" },
-      { title: "Privacy", href: "#" },
-      { title: "Teams", href: "#" },
-      { title: "About Us", href: "#" },
+      { title: "Terms", href: "/terms" },
     ],
   },
 ];
@@ -37,58 +26,16 @@ export const title = "Multi-Column Footer";
 
 export function FooterColumns01() {
   return (
-    <footer className="w-full border-t border-focused pb-8 pt-16 text-white bg-[#0f0f0f]">
+    <footer className="w-full border-t border-focused bg-[#0f0f0f] py-10 text-white">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between ">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h6 className="text-xl font-semibold text-focused">Neuraletter</h6>
-            <p className="  my-4 text-sm">
-              The next generation of design systems.
+            <h6 className="text-xl font-semibold text-focused cursor-pointer" href="/">Neuraletter</h6>
+            <p className="my-3 max-w-sm text-sm text-white/80">
+              The next generation of newsletters.
             </p>
-            <div className="flex gap-1">
-              <Button asChild variant="ghost" size="icon">
-                <a
-                  href="#"
-                  aria-label="Twitter"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Twitter className="h-4 w-4 text-focused" />
-                </a>
-              </Button>
-              <Button asChild variant="ghost" size="icon">
-                <a
-                  href="#"
-                  aria-label="YouTube"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Youtube className="h-4 w-4 text-focused" />
-                </a>
-              </Button>
-              <Button asChild variant="ghost" size="icon">
-                <a
-                  href="#"
-                  aria-label="Instagram"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Instagram className="h-4 w-4 text-focused" />
-                </a>
-              </Button>
-              <Button asChild variant="ghost" size="icon">
-                <a
-                  href="#"
-                  aria-label="GitHub"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="h-4 w-4 text-focused" />
-                </a>
-              </Button>
-            </div>
           </div>
-          <div className="flex justify-between gap-36">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:flex sm:gap-14">
             {LINKS.map(({ title, items }) => (
               <ul key={title} className="space-y-2 ">
                 <p className="mb-2 font-semibold text-focused">{title}</p>
@@ -96,7 +43,7 @@ export function FooterColumns01() {
                   <li key={title}>
                     <a
                       href={href}
-                      className=" hover:text-primary text-sm transition-colors"
+                      className="text-sm text-white/80 transition-colors hover:text-primary"
                     >
                       {title}
                     </a>
@@ -107,15 +54,40 @@ export function FooterColumns01() {
           </div>
 
           <div>
-            <p className="text-focused font-semibold text-[16px]">Send us a message</p>
-            <p className="text-sm mt-6">You don't need to log in to share your opinion</p>
-            <textarea className="bg-zinc-900 text-white focus:outline-none p-2 resize-none border-zinc-800 border rounded-lg mt-4 w-[300px] h-[100px]" placeholder="Your message"></textarea>
-            <Button className="bg-focused hover:bg-hover-focused text-black items-center rounded-[12px] flex justify-center gap-2 w-[90px] h-[50px] text-[18px] font-medium mt-2">
-              <p className="">Send</p>
-            </Button>
+            <div className="flex items-center gap-2 text-[16px] font-semibold text-focused">
+              <span>Made with</span>
+              <Heart className="h-5 w-5 text-focused" fill="currentColor" />
+            </div>
+            <p className="mt-2 text-sm text-white/80">
+              by <span className="font-medium text-white">Md. Raihan Hossen</span>
+            </p>
+
+            <div className="mt-4 flex gap-3">
+              <a
+                href="https://www.linkedin.com/in/mdraihanhossen"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-white/80 transition-colors hover:text-focused"
+                aria-label="LinkedIn: mdraihanhossen"
+              >
+                <Linkedin className="h-4 w-4" />
+                <span>mdraihanhossen</span>
+              </a>
+              <a
+                href="https://github.com/mdraihan27"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-white/80 transition-colors hover:text-focused"
+                aria-label="GitHub: mdraihan27"
+              >
+                <Github className="h-4 w-4" />
+                <span>mdraihan27</span>
+              </a>
+            </div>
           </div>
         </div>
-        <p className=" mt-20 text-center text-sm">
+
+        <p className="mt-10 border-t border-white/10 pt-6 text-center text-sm text-white/60">
           &copy; {YEAR} Neuraletter. All Rights Reserved.
         </p>
       </div>

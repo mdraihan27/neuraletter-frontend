@@ -8,9 +8,13 @@ export function Main({
   topicTitle,
   topicModel,
   topicDescription,
+  topicUpdateFrequencyHours,
+  topicNextUpdateTime,
   setIsDescriptionChatVisible,
   selectedTopicId,
   setTopicTitle,
+  setTopicUpdateFrequencyHours,
+  setTopicNextUpdateTime,
   setTopicList,
 }) {
   const hasTopic = Boolean(topicTitle || topicDescription || topicModel);
@@ -19,26 +23,225 @@ export function Main({
   const [isSavingTitle, setIsSavingTitle] = useState(false);
   const titleInputRef = useRef(null);
 
-  const [updates, setUpdates] = useState([]);
-  const [selectedUpdate, setSelectedUpdate] = useState(null);
+  const [isEditingFrequency, setIsEditingFrequency] = useState(false);
+  const [frequencyDraft, setFrequencyDraft] = useState(
+    topicUpdateFrequencyHours != null ? String(topicUpdateFrequencyHours) : ""
+  );
+  const [isSavingFrequency, setIsSavingFrequency] = useState(false);
+  const frequencyInputRef = useRef(null);
 
   const [timeToNextUpdate, setTimeToNextUpdate] = useState(null);
 
-  const validUpdateTimestamps = updates
-    .map((update) => update.created_at)
-    .filter((value) => value !== null && value !== undefined)
-    .map((value) => new Date(value).getTime())
-    .filter((time) => !Number.isNaN(time));
+  const [updateBatches, setUpdateBatches] = useState([]);
+  const [isLoadingUpdates, setIsLoadingUpdates] = useState(false);
+  const [updatesError, setUpdatesError] = useState(null);
+  const [activeBatch, setActiveBatch] = useState(null);
 
-  const latestUpdateTimestamp =
-    validUpdateTimestamps.length > 0
-      ? Math.max(...validUpdateTimestamps)
-      : null;
+  const latestUpdateDate = null;
 
-  const latestUpdateDate =
-    latestUpdateTimestamp !== null
-      ? new Date(latestUpdateTimestamp).toLocaleDateString()
-      : null;
+  const formatDateTime = (value) => {
+    if (value == null) return null;
+
+    const epochMs = normalizeEpochMs(value);
+    if (epochMs != null) {
+      const date = new Date(epochMs);
+      if (!Number.isNaN(date.getTime())) {
+        return new Intl.DateTimeFormat(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(date);
+      }
+    }
+
+    if (typeof value === "string") {
+      const asDate = new Date(value);
+      if (!Number.isNaN(asDate.getTime())) {
+        return new Intl.DateTimeFormat(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(asDate);
+      }
+    }
+
+    return null;
+  };
+
+  const toArray = (maybeArray) => (Array.isArray(maybeArray) ? maybeArray : []);
+
+  const normalizeUpdatesPayload = (data) => {
+    const topLevelCandidates =
+      data?.batches ??
+      data?.update_batches ??
+      data?.sent_updates ??
+      data?.letters ??
+      data?.results ??
+      data?.updates ??
+      [];
+
+    const candidates = toArray(topLevelCandidates);
+    if (candidates.length === 0) {
+      return [];
+    }
+
+    const first = candidates[0];
+
+    const looksLikeBatch = (item) => {
+      if (!item || typeof item !== "object") return false;
+      return (
+        Array.isArray(item.updates) ||
+        Array.isArray(item.items) ||
+        Array.isArray(item.entries) ||
+        Array.isArray(item.content)
+      );
+    };
+
+    const normalizeUpdateItem = (item) => {
+      if (item == null) return null;
+      if (typeof item === "string") {
+        return { heading: "Update", body: item, link: null };
+      }
+      if (typeof item !== "object") {
+        return { heading: "Update", body: String(item), link: null };
+      }
+
+      const heading = item.heading ?? item.title ?? item.headline ?? "Update";
+      const body = item.body ?? item.text ?? item.summary ?? item.content ?? "";
+      const link = item.link ?? item.url ?? item.source_url ?? null;
+      return { heading, body, link };
+    };
+
+    if (looksLikeBatch(first)) {
+      return candidates.map((batch, index) => {
+        const batchId =
+          batch.id ??
+          batch.batch_id ??
+          batch.update_batch_id ??
+          batch.sent_at ??
+          batch.created_at ??
+          index;
+        const sentAt = batch.sent_at ?? batch.created_at ?? batch.date ?? null;
+        const label =
+          batch.label ??
+          batch.name ??
+          formatDateTime(sentAt) ??
+          `Batch ${index + 1}`;
+
+        const rawUpdates =
+          batch.updates ?? batch.items ?? batch.entries ?? batch.content ?? [];
+        const updates = toArray(rawUpdates)
+          .map(normalizeUpdateItem)
+          .filter(Boolean);
+
+        return { id: String(batchId), label, sentAt, updates };
+      });
+    }
+
+    const batchKeyFromItem = (item) => {
+      if (!item || typeof item !== "object") return null;
+      return (
+        item.batch_id ??
+        item.update_batch_id ??
+        item.batchId ??
+        item.updateBatchId ??
+        null
+      );
+    };
+
+    const batchSentAtFromItem = (item) => {
+      if (!item || typeof item !== "object") return null;
+      return (
+        item.batch_sent_at ??
+        item.batch_created_at ??
+        item.sent_at ??
+        item.created_at ??
+        item.date ??
+        null
+      );
+    };
+
+    const shouldGroupByBatchId = candidates.some((item) => batchKeyFromItem(item) != null);
+    if (shouldGroupByBatchId) {
+      const grouped = new Map();
+
+      for (const item of candidates) {
+        const rawKey = batchKeyFromItem(item) ?? "unknown";
+        const key = String(rawKey);
+        const sentAt = batchSentAtFromItem(item);
+
+        if (!grouped.has(key)) {
+          grouped.set(key, {
+            id: key,
+            label: formatDateTime(sentAt) ?? `Batch ${key}`,
+            sentAt: sentAt ?? null,
+            updates: [],
+          });
+        }
+
+        const group = grouped.get(key);
+        if (group.sentAt == null && sentAt != null) {
+          group.sentAt = sentAt;
+          group.label = formatDateTime(sentAt) ?? group.label;
+        }
+
+        const normalized = normalizeUpdateItem(item);
+        if (normalized) group.updates.push(normalized);
+      }
+
+      const asArray = Array.from(grouped.values());
+      asArray.sort((a, b) => {
+        const aTime = normalizeEpochMs(a.sentAt);
+        const bTime = normalizeEpochMs(b.sentAt);
+        if (aTime != null && bTime != null) return bTime - aTime;
+        if (aTime != null) return -1;
+        if (bTime != null) return 1;
+        return String(b.id).localeCompare(String(a.id));
+      });
+
+      return asArray;
+    }
+
+    const updates = candidates.map(normalizeUpdateItem).filter(Boolean);
+    return [{ id: "updates", label: "Sent Updates", sentAt: null, updates }];
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadUpdates = async () => {
+      if (!selectedTopicId) {
+        setUpdateBatches([]);
+        setUpdatesError(null);
+        setIsLoadingUpdates(false);
+        return;
+      }
+
+      setIsLoadingUpdates(true);
+      setUpdatesError(null);
+
+      const response = await getUpdates(selectedTopicId);
+      if (cancelled) return;
+
+      if (response.success) {
+        setUpdateBatches(normalizeUpdatesPayload(response.data));
+      } else {
+        setUpdateBatches([]);
+        setUpdatesError(response.error || "Failed to fetch updates");
+      }
+
+      setIsLoadingUpdates(false);
+    };
+
+    loadUpdates();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedTopicId]);
 
   // const handleSendClick = .
 
@@ -47,33 +250,30 @@ export function Main({
   // }, [chatList]);
 
   useEffect(() => {
-    const fetchUpdates = async () => {
-      console.log("Use")
-      if (!selectedTopicId) return;
-      const response = await getUpdates(selectedTopicId);
-      console.log(response);
-      if (response.success && Array.isArray(response.data?.updates)) {
-        setUpdates(response.data.updates);
-      } else {
-        setUpdates([]);
-      }
-    };
-
-    fetchUpdates();
-
     if (isEditingTitle && titleInputRef.current) {
       titleInputRef.current.focus();
       titleInputRef.current.select();
     }
-  }, [isEditingTitle, selectedTopicId]);
+
+    if (isEditingFrequency && frequencyInputRef.current) {
+      frequencyInputRef.current.focus();
+      frequencyInputRef.current.select();
+    }
+  }, [isEditingTitle, isEditingFrequency, selectedTopicId]);
+
+  const normalizeEpochMs = (value) => {
+    if (value == null) return null;
+    const asNumber = typeof value === "string" ? Number(value) : value;
+    if (!Number.isFinite(asNumber)) return null;
+    // Heuristic: seconds are ~1e9-1e10, ms are ~1e12-1e13.
+    return asNumber < 1e12 ? asNumber * 1000 : asNumber;
+  };
 
   useEffect(() => {
-    if (latestUpdateTimestamp === null) {
-      setTimeToNextUpdate(null);
+    const targetTime = normalizeEpochMs(topicNextUpdateTime);
+    if (targetTime == null) {
       return;
     }
-
-    const targetTime = latestUpdateTimestamp + 24 * 60 * 60 * 1000;
 
     const updateTimer = () => {
       const now = Date.now();
@@ -90,20 +290,17 @@ export function Main({
       const seconds = totalSeconds % 60;
 
       const pad = (n) => String(n).padStart(2, "0");
-
-      setTimeToNextUpdate(
-        `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`
-      );
+      setTimeToNextUpdate(`${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`);
     };
 
     updateTimer();
     const intervalId = setInterval(updateTimer, 1000);
-
     return () => clearInterval(intervalId);
-  }, [latestUpdateTimestamp]);
+  }, [topicNextUpdateTime]);
 
   const handleStartEditing = () => {
     if (!selectedTopicId || isSavingTitle) return;
+    setTitleDraft(topicTitle);
     setIsEditingTitle(true);
   };
 
@@ -143,6 +340,82 @@ export function Main({
     }
     setIsSavingTitle(false);
     setIsEditingTitle(false);
+  };
+
+  const handleStartEditingFrequency = () => {
+    if (!selectedTopicId || isSavingFrequency) return;
+    setFrequencyDraft(
+      topicUpdateFrequencyHours != null ? String(topicUpdateFrequencyHours) : ""
+    );
+    setIsEditingFrequency(true);
+  };
+
+  const handleCancelEditingFrequency = () => {
+    setFrequencyDraft(
+      topicUpdateFrequencyHours != null ? String(topicUpdateFrequencyHours) : ""
+    );
+    setIsEditingFrequency(false);
+  };
+
+  const handleSubmitFrequency = async () => {
+    if (!selectedTopicId) {
+      setIsEditingFrequency(false);
+      return;
+    }
+
+    const parsed = Number.parseInt(frequencyDraft, 10);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      handleCancelEditingFrequency();
+      return;
+    }
+
+    if (parsed === topicUpdateFrequencyHours) {
+      setIsEditingFrequency(false);
+      return;
+    }
+
+    setIsSavingFrequency(true);
+    const response = await updateTopic(selectedTopicId, {
+      update_frequency_hours: parsed,
+    });
+
+    if (response.success) {
+      setTopicUpdateFrequencyHours(parsed);
+      setTopicList((prev) =>
+        prev.map((topic) =>
+          topic.id === selectedTopicId
+            ? { ...topic, update_frequency_hours: parsed }
+            : topic
+        )
+      );
+
+      const nextTime =
+        response.data?.topic_info?.next_update_time ??
+        response.data?.topic?.next_update_time ??
+        null;
+      if (nextTime != null) {
+        setTopicNextUpdateTime(nextTime);
+      }
+    } else {
+      setFrequencyDraft(
+        topicUpdateFrequencyHours != null
+          ? String(topicUpdateFrequencyHours)
+          : ""
+      );
+    }
+
+    setIsSavingFrequency(false);
+    setIsEditingFrequency(false);
+  };
+
+  const handleFrequencyKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSubmitFrequency();
+    }
+    if (event.key === "Escape") {
+      handleCancelEditingFrequency();
+    }
   };
 
   const handleTitleKeyDown = (event) => {
@@ -199,15 +472,15 @@ export function Main({
           </div>
         </div>
       </div>
-      <div className=" h-5/11 flex justify-center gap-6">
-        <div className="w-full flex flex-col gap-6">
-          <div className="bg-linear-45 from-[#92adff30]  to-[#1f1f1f50] rounded-xl w-full px-6 py-5 flex flex-col  gap-3">
+      <div className="h-5/11 min-h-0 flex justify-center gap-6">
+        <div className="w-full h-full min-h-0 flex flex-col gap-6">
+          {/* <div className="bg-linear-45 from-[#92adff30]  to-[#1f1f1f50] rounded-xl w-full px-6 py-5 flex flex-col  gap-3">
             <p className="text-sm">Last Letter Sent</p>
             <p className="text-2xl font-medium ">
               {latestUpdateDate || "No letters sent yet"}
             </p>
-          </div>
-          <div className=" rounded-xl h-full w-full px-6 py-5  leading-10 font-medium flex flex-col  bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] gap-3">
+          </div> */}
+          <div className="rounded-xl w-full px-6 py-5 leading-10 font-medium flex flex-col bg-linear-45 from-[#1f1f1f50] to-[#92adff30] gap-3">
             <p className="text-sm">Model Used</p>
             <div>
               <div className="flex justify-start">
@@ -215,107 +488,172 @@ export function Main({
                   {topicModel}
                 </p>
               </div>
-              <p className="pe-6">
+              {/* <p className="pe-6">
                 Mistral Large 3, is a state-of-the-art, open-weight,
                 general-purpose multimodal model with a granular
                 Mixture-of-Experts architecture. It features 41B active
                 parameters and 675B total parameters.
+              </p> */}
+            </div>
+          </div>
+
+          <div className="flex-1 min-h-0 rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50] to-[#92adff30] flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium">Sent Updates</p>
+              <p className="text-sm text-zinc-300">
+                {isLoadingUpdates
+                  ? "Loading..."
+                  : updateBatches.reduce(
+                      (count, batch) => count + (batch.updates?.length || 0),
+                      0
+                    )}
               </p>
+            </div>
+
+            {updatesError ? (
+              <p className="text-zinc-300 text-sm">{updatesError}</p>
+            ) : null}
+
+            {!isLoadingUpdates && updateBatches.length === 0 ? (
+              <p className="text-zinc-300 text-sm">No sent updates yet.</p>
+            ) : null}
+
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pe-2">
+              <div className="flex flex-col gap-3">
+                {updateBatches.map((batch) => (
+                  <button
+                    key={batch.id}
+                    type="button"
+                    onClick={() => setActiveBatch(batch)}
+                    className="text-left w-full rounded-xl bg-[#1f1f1f] hover:bg-zinc-700/50 transition-colors px-4 py-4 flex items-center justify-between gap-4"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-medium truncate">{batch.label}</p>
+                      <p className="text-sm text-zinc-300">
+                        {batch.updates?.length || 0} updates
+                      </p>
+                    </div>
+                    <div className="text-focused text-sm">View</div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         <div className="w-full flex flex-col gap-6 h-full">
-          <div className="bg-linear-45 from-[#92adff30]  to-[#1f1f1f50] rounded-xl w-full px-6 py-5 h-full text-2xl flex flex-col gap-3">
-            <p className="text-sm">Upcoming Updates</p>
-            <div className="flex flex-col gap-2 text-base max-h-64 overflow-y-auto pr-2 scrollbar-hide">
-              {updates.length === 0 && (
-                <p className="text-sm text-zinc-400">No updates yet.</p>
-              )}
-              {updates.map((update) => {
-                const createdDate = update.created_at
-                  ? new Date(update.created_at).toLocaleString()
-                  : "Unknown date";
-                const title = update.title || "Untitled update";
-                const shortTitle =
-                  title.length > 40 ? `${title.slice(0, 40)}...` : title;
-
-                return (
-                  <button
-                    key={update.id}
-                    type="button"
-                    className="w-full text-left px-3 py-2 rounded-lg bg-[#1f1f1f90] hover:bg-[#2b2b2b] transition-colors border border-transparent hover:border-focused/60"
-                    onClick={() => setSelectedUpdate(update)}
-                  >
-                    <p className="text-xs text-zinc-400 mb-1">{createdDate}</p>
-                    <p className="text-sm font-medium truncate">{shortTitle}</p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
           <div className="text-2xl rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
             <p className="text-sm">Next Update In</p>
             <p>
-              {latestUpdateTimestamp
+              {topicNextUpdateTime != null
                 ? timeToNextUpdate || "Calculating..."
-                : "No updates yet"}
+                : "No updates scheduled"}
             </p>
+          </div>
+
+          <div className="text-2xl rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm">Update Frequency (Hours)</p>
+              <SquarePen
+                className="hover:text-focused cursor-pointer"
+                onClick={handleStartEditingFrequency}
+              />
+            </div>
+            {isEditingFrequency ? (
+              <input
+                ref={frequencyInputRef}
+                value={frequencyDraft}
+                onChange={(e) => setFrequencyDraft(e.target.value)}
+                onKeyDown={handleFrequencyKeyDown}
+                className="bg-transparent outline-none border-b-2 border-focused caret-focused text-white w-full min-w-0"
+                disabled={isSavingFrequency}
+                inputMode="numeric"
+                type="number"
+                min={1}
+                step={1}
+                aria-label="Edit update frequency hours"
+              />
+            ) : (
+              <p>
+                {topicUpdateFrequencyHours != null
+                  ? `${topicUpdateFrequencyHours} hours`
+                  : "Not set"}
+              </p>
+            )}
           </div>
         </div>
       </div>
+
+      {activeBatch ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/60"
+            aria-label="Close updates"
+            onClick={() => setActiveBatch(null)}
+          />
+          <div className="relative w-[min(900px,92vw)] max-h-[85vh] bg-zinc-800 rounded-xl shadow-2xl shadow-black/50 border border-zinc-700 overflow-hidden flex flex-col">
+            <div className="px-6 py-5 flex items-start justify-between gap-4 border-b border-zinc-700">
+              <div className="min-w-0">
+                <p className="text-xl font-medium truncate">{activeBatch.label}</p>
+                <p className="text-sm text-zinc-300">
+                  {activeBatch.updates?.length || 0} updates
+                </p>
+              </div>
+              <button
+                type="button"
+                className="hover:text-focused"
+                onClick={() => setActiveBatch(null)}
+                aria-label="Close"
+              >
+                <X />
+              </button>
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-6">
+              <div className="flex flex-col gap-4">
+                {(activeBatch.updates || []).map((update, index) => (
+                  <div
+                    key={`${activeBatch.id}-${index}`}
+                    className="rounded-xl bg-linear-45 from-[#1f1f1f50] to-[#92adff30] px-5 py-4"
+                  >
+                    <p className="font-medium">{update.heading}</p>
+                    {update.body ? (
+                      <p className="text-zinc-200 text-base mt-2 leading-relaxed">
+                        {update.body}
+                      </p>
+                    ) : null}
+                    {update.link ? (
+                      <a
+                        href={update.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex mt-3 text-focused border-b border-focused text-sm"
+                      >
+                        Open link
+                      </a>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <div
         className="w-full flex justify-end"
-        onClick={() => {
+       
+      >
+        <button className="bg-focused hover:bg-hover-focused text-zinc-900 font-medium flex justify-center gap-4 px-7 py-4 cursor-pointer rounded-full text-xl items-center" 
+         onClick={() => {
           setIsDescriptionChatVisible(true);
         }}
-      >
-        <button className="bg-focused hover:bg-hover-focused text-zinc-900 font-medium flex justify-center gap-4 px-7 py-4 cursor-pointer rounded-full text-xl items-center">
+        >
           Generate Description <SquarePen />
         </button>
       </div>
 
-      {selectedUpdate && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-          <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-xl w-full mx-4 p-6 flex flex-col gap-4 border border-[#92adff40]">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex flex-col gap-1">
-                <p className="text-xs text-zinc-400">
-                  {selectedUpdate.created_at
-                    ? new Date(selectedUpdate.created_at).toLocaleString()
-                    : "Unknown date"}
-                </p>
-                <h2 className="text-xl font-semibold">
-                  {selectedUpdate.title || "Untitled update"}
-                </h2>
-              </div>
-              <button
-                type="button"
-                className="p-1 rounded-full hover:bg-zinc-800 text-zinc-400 hover:text-white"
-                onClick={() => setSelectedUpdate(null)}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {selectedUpdate.summary && (
-              <p className="text-sm text-zinc-200">
-                {selectedUpdate.summary}
-              </p>
-            )}
-
-            {selectedUpdate.image_link && (
-              <div className="mt-2">
-                <img
-                  src={selectedUpdate.image_link}
-                  alt={selectedUpdate.title || "Update image"}
-                  className="w-full h-48 object-cover rounded-xl border border-zinc-800"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

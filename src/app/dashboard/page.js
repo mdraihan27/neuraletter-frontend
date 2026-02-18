@@ -21,9 +21,15 @@ export default function Dashboard() {
   const [topicTitle, setTopicTitle] = useState("");
   const [topicDescription, setTopicDescription] = useState("");
   const [topicModel, setTopicModel] = useState("");
+  const [topicUpdateFrequencyHours, setTopicUpdateFrequencyHours] =
+    useState(null);
+  const [topicNextUpdateTime, setTopicNextUpdateTime] = useState(null);
   const [selectedTopicId, setSelectedTopicId] = useState(null);
   const [isDescriptionChatVisible, setIsDescriptionChatVisible] =
-    useState(true);
+    useState(false);
+
+  const shouldShowDescriptionChat =
+    Boolean(isDescriptionChatVisible) && selectedTopicId != null;
 
   const [isLoading, setIsLoading] = useState(false);
   const handleLogOutClick = async () => {
@@ -53,6 +59,8 @@ export default function Dashboard() {
           setTopicTitle={setTopicTitle}
           setTopicDescription={setTopicDescription}
           setTopicModel={setTopicModel}
+          setTopicUpdateFrequencyHours={setTopicUpdateFrequencyHours}
+          setTopicNextUpdateTime={setTopicNextUpdateTime}
           setIsDescriptionChatVisible={setIsDescriptionChatVisible}
           setSelectedTopicId={setSelectedTopicId}
         />
@@ -62,26 +70,52 @@ export default function Dashboard() {
               className="text-white flex items-center justify-between gap-3 pt-6 "
               
             >
-            <ArrowLeft className={cn("rounded-full bg-zinc-700 p-2 cursor-pointer hover:bg-[#97adff60]" , isDescriptionChatVisible? "block" : "invisible")} width={40} height={40} onClick={()=>{
-              setIsDescriptionChatVisible(false)
-            }}/>
-              <div onClick={handleLogOutClick} className="flex justify-center gap-3 items-center hover:text-focused cursor-pointer ">
-                <p>Log Out</p>
-                <LogOut />
+              <div className="w-40 flex justify-start">
+                <ArrowLeft
+                  className={cn(
+                    "rounded-full bg-zinc-700 p-2 cursor-pointer hover:bg-[#97adff60]",
+                    shouldShowDescriptionChat ? "block" : "invisible"
+                  )}
+                  width={40}
+                  height={40}
+                  onClick={() => {
+                    setIsDescriptionChatVisible(false);
+                  }}
+                />
+              </div>
+
+              <div className="flex-1 flex justify-center min-w-0">
+                {shouldShowDescriptionChat ? (
+                  <p className="font-medium truncate max-w-full">{topicTitle || "Topic"}</p>
+                ) : null}
+              </div>
+
+              <div className="w-40 flex justify-end">
+                <div
+                  onClick={handleLogOutClick}
+                  className="flex justify-center gap-3 items-center hover:text-focused cursor-pointer "
+                >
+                  <p>Log Out</p>
+                  <LogOut />
+                </div>
               </div>
             </div>
           </div>
           <div className="flex-1 min-h-0">
-            {isDescriptionChatVisible ? (
+            {shouldShowDescriptionChat ? (
               <DescriptionChat topicId={selectedTopicId} />
             ) : (
               <Main
                 topicTitle={topicTitle}
                 topicDescription={topicDescription}
                 topicModel={topicModel}
+                topicUpdateFrequencyHours={topicUpdateFrequencyHours}
+                topicNextUpdateTime={topicNextUpdateTime}
                 setIsDescriptionChatVisible={setIsDescriptionChatVisible}
                 selectedTopicId={selectedTopicId}
                 setTopicTitle={setTopicTitle}
+                setTopicUpdateFrequencyHours={setTopicUpdateFrequencyHours}
+                setTopicNextUpdateTime={setTopicNextUpdateTime}
                 setTopicList={setTopicList}
               />
             )}

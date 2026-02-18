@@ -1,14 +1,13 @@
 import Cookies from "js-cookie";
 import apiClient from "./apiClient";
 
-export async function createTopic(title, tier, model) {
+export async function createTopic(title, tier, model, updateFrequencyHours = 24) {
   try {
-    console.log(model)
     const token = Cookies.get("access_token");
 
     const response = await apiClient.post(
       "/topic/",
-      { title, tier, model },
+      { title, tier, model, update_frequency_hours: updateFrequencyHours },
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,11 +1,8 @@
-import { error } from "three";
 import apiClient from "./apiClient";
 import Cookies from "js-cookie";
 
 export async function getUpdates(topic_id) {
   try {
-
-    console.log(topic_id)
     const token = Cookies.get("access_token");
 
     const response = await apiClient.get(
@@ -26,7 +23,7 @@ export async function getUpdates(topic_id) {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to fetch topic chat",
+      error: data?.message || data?.detail || "Failed to fetch updates",
     };
   } catch (error) {
     return {
