@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { SquarePen, Frame, X } from "lucide-react";
+import { SquarePen, Frame, X, Plus } from "lucide-react";
 import { updateTopic } from "@/api/topicApi";
 import { getUpdates } from "@/api/updateApi";
 
@@ -16,6 +16,7 @@ export function Main({
   setTopicUpdateFrequencyHours,
   setTopicNextUpdateTime,
   setTopicList,
+  setIsCreateTopicFormVisible,
 }) {
   const hasTopic = Boolean(topicTitle || topicDescription || topicModel);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -430,18 +431,25 @@ export function Main({
 
   if (!hasTopic) {
     return (
-      <div className="text-white flex items-center justify-center h-full text-3xl mb-40">
+      <div className="text-white flex flex-col items-center justify-center h-full text-xl sm:text-2xl lg:text-3xl mb-20 sm:mb-40 px-4 gap-5 sm:gap-6">
         <p className="text-center text-zinc-400">
           Create a new topic or select one from the sidebar to see its details.
         </p>
+        <button
+          type="button"
+          className="bg-focused hover:bg-hover-focused text-zinc-900 font-medium px-6 py-3 rounded-full cursor-pointer text-base sm:text-lg flex items-center gap-2"
+          onClick={() => setIsCreateTopicFormVisible(true)}
+        >
+          <Plus className="w-5 h-5" /> Create Topic
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="text-white flex flex-col gap-6 h-full text-xl">
-      <div className="flex flex-col gap-6">
-        <div className="flex bg-[#1f1f1f] w-full justify-between items-center p-6 rounded-xl text-white ">
+    <div className="text-white flex flex-col gap-4 sm:gap-6 h-full text-base sm:text-lg lg:text-xl overflow-y-auto lg:overflow-hidden custom-scrollbar pb-4">
+      <div className="flex flex-col gap-4 sm:gap-6">
+        <div className="flex bg-[#1f1f1f] w-full justify-between items-center p-4 sm:p-6 rounded-xl text-white ">
           <div className="flex items-center h-full justify-start gap-4">
             <Frame />
             {isEditingTitle ? (
@@ -463,7 +471,7 @@ export function Main({
             onClick={handleStartEditing}
           />
         </div>
-        <div className="bg-[#1f1f1f] p-6 flex flex-col gap-5 rounded-xl">
+        <div className="bg-[#1f1f1f] p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 rounded-xl">
           <div className="flex  w-full justify-between rounded-xl items-center text-white">
             <p className="font-medium">Description</p>
           </div>
@@ -472,15 +480,15 @@ export function Main({
           </div>
         </div>
       </div>
-      <div className="h-5/11 min-h-0 flex justify-center gap-6">
-        <div className="w-full h-full min-h-0 flex flex-col gap-6">
+      <div className="lg:h-5/11 lg:min-h-0 flex flex-col lg:flex-row justify-center gap-4 sm:gap-6 shrink-0 lg:shrink">
+        <div className="w-full lg:h-full lg:min-h-0 flex flex-col gap-4 sm:gap-6">
           {/* <div className="bg-linear-45 from-[#92adff30]  to-[#1f1f1f50] rounded-xl w-full px-6 py-5 flex flex-col  gap-3">
             <p className="text-sm">Last Letter Sent</p>
             <p className="text-2xl font-medium ">
               {latestUpdateDate || "No letters sent yet"}
             </p>
           </div> */}
-          <div className="rounded-xl w-full px-6 py-5 leading-10 font-medium flex flex-col bg-linear-45 from-[#1f1f1f50] to-[#92adff30] gap-3">
+          <div className="rounded-xl w-full px-4 sm:px-6 py-4 sm:py-5 leading-8 sm:leading-10 font-medium flex flex-col bg-linear-45 from-[#1f1f1f50] to-[#92adff30] gap-3">
             <p className="text-sm">Model Used</p>
             <div>
               <div className="flex justify-start">
@@ -497,16 +505,16 @@ export function Main({
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50] to-[#92adff30] flex flex-col gap-4">
+          <div className="lg:flex-1 lg:min-h-0 rounded-xl w-full px-4 sm:px-6 py-4 sm:py-5 bg-linear-45 from-[#1f1f1f50] to-[#92adff30] flex flex-col gap-4 max-h-[280px] lg:max-h-none">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium">Sent Updates</p>
               <p className="text-sm text-zinc-300">
                 {isLoadingUpdates
                   ? "Loading..."
                   : updateBatches.reduce(
-                      (count, batch) => count + (batch.updates?.length || 0),
-                      0
-                    )}
+                    (count, batch) => count + (batch.updates?.length || 0),
+                    0
+                  )}
               </p>
             </div>
 
@@ -541,8 +549,8 @@ export function Main({
           </div>
         </div>
 
-        <div className="w-full flex flex-col gap-6 h-full">
-          <div className="text-2xl rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-4 sm:gap-6 lg:h-full">
+          <div className="text-xl sm:text-2xl rounded-xl w-full px-4 sm:px-6 py-4 sm:py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
             <p className="text-sm">Next Update In</p>
             <p>
               {topicNextUpdateTime != null
@@ -551,7 +559,7 @@ export function Main({
             </p>
           </div>
 
-          <div className="text-2xl rounded-xl w-full px-6 py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
+          <div className="text-xl sm:text-2xl rounded-xl w-full px-4 sm:px-6 py-4 sm:py-5 bg-linear-45 from-[#1f1f1f50]  to-[#92adff30] flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <p className="text-sm">Update Frequency (Hours)</p>
               <SquarePen
@@ -642,13 +650,12 @@ export function Main({
       ) : null}
 
       <div
-        className="w-full flex justify-end"
-       
+        className="fixed bottom-0 left-0 right-0 z-30 p-4 bg-transparent lg:static lg:bg-transparent lg:backdrop-blur-none lg:p-0 flex justify-center sm:justify-end"
       >
-        <button className="bg-focused hover:bg-hover-focused text-zinc-900 font-medium flex justify-center gap-4 px-7 py-4 cursor-pointer rounded-full text-xl items-center" 
-         onClick={() => {
-          setIsDescriptionChatVisible(true);
-        }}
+        <button className="bg-focused hover:bg-hover-focused text-zinc-900 font-medium flex justify-center gap-3 sm:gap-4 px-5 sm:px-7 py-3 sm:py-4 cursor-pointer rounded-full text-base sm:text-xl items-center w-full sm:w-auto"
+          onClick={() => {
+            setIsDescriptionChatVisible(true);
+          }}
         >
           Generate Description <SquarePen />
         </button>

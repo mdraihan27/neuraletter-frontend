@@ -65,7 +65,7 @@ export function DescriptionChat({ topicId }) {
         { chat_message: message, sent_by_user: true },
       ];
     });
-    console.log(message+"2")
+    console.log(message + "2")
     setIsThinking(true);
     const response = await chatWithAi(topicId, message);
     console.log(response);
@@ -81,7 +81,7 @@ export function DescriptionChat({ topicId }) {
   };
 
   return (
-    <div className="text-white flex flex-col gap-6 h-full text-xl pb-20 relative">
+    <div className="text-white flex flex-col gap-4 sm:gap-6 h-full text-base sm:text-lg lg:text-xl pb-20 relative">
       {/* <div className="w-full px-20 pt-8">
         <p className="text-2xl font-medium truncate">
           {topicTitle || "Topic"}
@@ -89,13 +89,13 @@ export function DescriptionChat({ topicId }) {
       </div> */}
       <div
         ref={chatContainerRef}
-        className="w-full px-20 flex flex-col gap-4 flex-1 min-h-0 chat-scroll chat-fade py-40"
+        className="w-full px-3 pb-20 sm:px-10 lg:px-20 flex flex-col gap-4 flex-1 min-h-0 chat-scroll chat-fade py-16 sm:py-28 lg:py-40"
       >
         {topicChats.map((topicChat, index) => {
           console.log(topicChat);
           if (topicChat.sent_by_user) {
             console.log(topicChat.chat_message);
-            return <UserMessage messageText={topicChat.chat_message} key={index}/>;
+            return <UserMessage messageText={topicChat.chat_message} key={index} />;
           } else {
             console.log(topicChat.chat_message);
 
@@ -130,7 +130,7 @@ export function UserMessage({ messageText }) {
   return (
     <div className="w-full flex justify-between mb-5">
       <div></div>
-      <div className="bg-[#97adff60] text-lg rounded-xl px-6 py-3 max-w-2/3">
+      <div className="bg-[#97adff60] text-sm sm:text-base lg:text-lg rounded-xl px-4 sm:px-6 py-3 max-w-[85%] sm:max-w-2/3">
         <p>{messageText}</p>
       </div>
     </div>
@@ -140,7 +140,7 @@ export function UserMessage({ messageText }) {
 export function AiMessage({ messageText }) {
   return (
     <div className="w-full  flex justify-between mb-5">
-      <div className="bg-gray-700/70 text-lg rounded-xl px-6 py-3 max-w-2/3">
+      <div className="bg-gray-700/70 text-sm sm:text-base lg:text-lg rounded-xl px-4 sm:px-6 py-3 max-w-[85%] sm:max-w-2/3">
         <p>{messageText}</p>
       </div>
       <div></div>

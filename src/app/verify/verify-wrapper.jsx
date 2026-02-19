@@ -15,7 +15,7 @@ export function ForgetPasswordVerificationFormWrapper() {
       {isLoading ? <Spinner /> : null}
       <ForgetPasswordVerificationForm
         email={email}
-        className={"w-[400px] mt-60 mb-44 scale-130 "}
+        className={"w-full max-w-[420px] px-5 mt-28 sm:mt-40 lg:mt-48 mb-16 sm:mb-24 lg:mb-32 lg:scale-110 "}
         setIsLoading={setIsLoading}
       />
     </>

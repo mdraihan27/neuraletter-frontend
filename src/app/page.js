@@ -1,6 +1,5 @@
 "use client";
 import { AuroraBackground } from "@/components/ui/shadcn-io/aurora-background";
-import { EmailSkeleton } from "@/components/layout/email-skeleton";
 import TypingText from "@/components/ui/shadcn-io/typing-text/index";
 import { Nav } from "@/components/ui/nav";
 import { Button } from "@/components/ui/imported/button";
@@ -26,8 +25,8 @@ export default function Home() {
   const pricingRef = useRef(null);
 
   return (
-    <div className="w-screen flex justify-center">
-      <div className="">
+    <div className="w-screen flex justify-center overflow-x-hidden">
+      <div className="w-full">
         <Nav
           navItems={[
             { id: "home", navItemName: "Home", targetRef: homeRef, offset: 0 },
@@ -55,45 +54,41 @@ export default function Home() {
           className="w-full hide-scrollbar-y bg-black relative"
           ref={homeRef}
         >
+          {/* ━━━ HERO ━━━ */}
           <AuroraBackground className="bg-black">
-            <div className="w-dvw flex justify-center items-center flex-col mt-28">
+            <div className="w-full max-w-7xl mx-auto flex justify-center items-center flex-col mt-20 lg:mt-28 px-4 sm:px-6">
               <h1
-                className={
-                  "text-[74px] max-w-7xl text-center font-bold text-focused mt-28 leading-16 "
-                }
+                className="text-[32px] sm:text-[40px] md:text-[52px] lg:text-[74px] max-w-7xl text-center font-bold text-focused mt-16 sm:mt-20 lg:mt-28 leading-tight sm:leading-tight lg:leading-16"
               >
                 NeuraLetter
               </h1>
-              <h1 className={"text-[74px] text-white font-bold"}>
+              <h1 className="text-[32px] sm:text-[40px] md:text-[52px] lg:text-[74px] text-white font-bold text-center leading-tight">
                 Newsletter Redefined
               </h1>
               <h2
-                className={
-                  "text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent "
-                }
+                className="text-base sm:text-lg lg:text-xl font-medium mt-3 bg-linear-to-r from-[#9fb7ff] via-[#ffffff] to-[#c4b4ff] bg-clip-text text-transparent text-center"
               >
                 Powered by AI
               </h2>
 
+              {/* Prompt Box */}
               <div
-                className={
-                  "border-[#161616] border-4 bg-[#18181885] h-[230px] w-[700px] rounded-3xl mt-24 px-11 shadow-[inset_0_0_0_2px_#92adff20] "
-                }
+                className="border-[#161616] border-4 bg-[#18181885] w-full max-w-[90vw] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] h-[180px] sm:h-[200px] lg:h-[230px] rounded-2xl sm:rounded-3xl mt-10 sm:mt-16 lg:mt-24 px-5 sm:px-8 lg:px-11 shadow-[inset_0_0_0_2px_#92adff20] relative"
               >
                 <textarea
-                  className="bg-[#ffffff0] w-[600px] h-[100px] absolute text-xl text-[#ffffff75] resize-none mt-9 focus:outline-none z-50"
+                  className="bg-transparent w-full h-[80px] sm:h-[100px] text-base sm:text-lg lg:text-xl text-[#ffffff75] resize-none mt-6 sm:mt-9 focus:outline-none z-50 relative"
                   autoFocus
                   onChange={(e) => {
                     setIsTyping(e.target.value.length > 0);
                   }}
                 ></textarea>
-                <div className="flex flex-col justify-between h-[230px] ">
+                <div className="flex flex-col justify-between h-full absolute inset-0 px-5 sm:px-8 lg:px-11">
                   <TypingText
                     text={[
                       "Latest research papers on Transformers, model and Neural networks",
-                      "Satellite Imagery Analysis, Military Movements, and Territorial Changes in Ongoing Conflicts in Eastern Europe and the Middle East",
-                      "AI Regulation Developments, Open-Source Model Leaks, Ethical AI Frameworks, and Corporate AI Strategy Announcements",
-                      "Innovations in Renewable Energy Storage, Battery Technology Advances, Green Hydrogen Projects, and International Energy Policy Shifts",
+                      "Satellite Imagery Analysis, Military Movements, and Territorial Changes in Ongoing Conflicts",
+                      "AI Regulation Developments, Open-Source Model Leaks, Ethical AI Frameworks",
+                      "Innovations in Renewable Energy Storage, Battery Technology Advances",
                     ]}
                     id="typing_text_prompt"
                     typingSpeed={725}
@@ -101,33 +96,18 @@ export default function Home() {
                     showCursor={false}
                     cursorCharacter="|"
                     cursorClassName="bg-white ms-2 h-[20px]"
-                    className="text-xl mt-9"
+                    className="text-base sm:text-lg lg:text-xl mt-6 sm:mt-9"
                     style={{ visibility: isTyping ? "hidden" : "visible" }}
                     textColors={["#ffffff35"]}
                     variableSpeed={{ min: 10, max: 90 }}
                   />
 
-                  <div className="flex justify-between  items-center mb-7 ">
-                    <div className="w-[150px] h-[30px] flex items-center rounded-sm ">
-                      {/* <select
-                        id="frequency"
-                        name="frequency"
-                        className="bg-[#202020] w-[140px] px-3 text-gray-400 rounded-full focus:outline-none focus:border-none border-none"
-                        defaultValue="Frequency"
-                      >
-                        <option value="1">1 Day</option>
-                        <option value="2">2 Days</option>
-                        <option value="3">3 Days</option>
-                        <option value="4">4 Days</option>
-                        <option value="5">5 Days</option>
-                        <option value="6">6 Days</option>
-                        <option value="7">1 Week</option>
-                        <option value="custom">Custom</option>
-                      </select> */}
+                  <div className="flex justify-between items-center mb-5 sm:mb-7">
+                    <div className="w-[80px] sm:w-[150px] h-[30px] flex items-center rounded-sm">
                     </div>
 
                     <Link href="/register" className="cursor-pointer z-50">
-                      <Button className="bg-focused hover:bg-hover-focused text-black items-center rounded-[30px] flex justify-center gap-2 w-[110px] h-[50px] text-[18px] font-medium cursor-pointer">
+                      <Button className="bg-focused hover:bg-hover-focused text-black items-center rounded-[30px] flex justify-center gap-2 w-[90px] h-[42px] sm:w-[110px] sm:h-[50px] text-[16px] sm:text-[18px] font-medium cursor-pointer">
                         <p className="ms-1">Try</p>
                         <img
                           src="/images/icons/arrow_forward2.svg"
@@ -142,8 +122,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <p className={"text-white text-xl mt-3 "}>
-                <span className="text-white font-medium ">
+              <p className="text-white text-sm sm:text-base lg:text-xl mt-3 text-center px-4">
+                <span className="text-white font-medium">
                   Ask AI to{" "}
                   <span className="text-focused">
                     recieve updates of your interest
@@ -154,56 +134,67 @@ export default function Home() {
             </div>
           </AuroraBackground>
 
+          {/* ━━━ FEATURES ━━━ */}
           <div
-            className="mt-36 flex flex-col items-center relative"
+            className="mt-16 sm:mt-24 lg:mt-36 flex flex-col items-center relative px-4"
             ref={featureRef}
           >
-            <h4 className="text-white text-3xl z-40 ">
+            <h4 className="text-white text-xl sm:text-2xl lg:text-3xl z-40 text-center">
               How does it work?
             </h4>
 
-            <LampContainer className="font-poppins ">
-              <InfiniteMovingCards
-                direction="left"
-                speed="slow"
-                className=""
-                pauseOnHover={false}
-              ></InfiniteMovingCards>
-            </LampContainer>
-            <div className="flex gap-10 absolute top-[700px]">
+            {/* Lamp + Infinite Cards — hidden on mobile, shown on tablet+ */}
+            <div className="hidden md:block">
+              <LampContainer className="font-poppins">
+                <InfiniteMovingCards
+                  direction="left"
+                  speed="slow"
+                  className=""
+                  pauseOnHover={false}
+                ></InfiniteMovingCards>
+              </LampContainer>
+            </div>
+
+            {/* Mobile-only: simple glow divider instead of lamp */}
+            <div className="block md:hidden mt-8 mb-4">
+              <div className="w-40 h-[2px] bg-focused mx-auto rounded-full opacity-60" />
+              <div className="w-24 h-[1px] bg-focused/30 mx-auto rounded-full mt-1 blur-sm" />
+            </div>
+
+            {/* Feature cards — responsive grid on smaller screens, original absolute positioning on lg */}
+            <div className="
+              grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-3xl mt-6
+              lg:flex lg:flex-row lg:gap-10 lg:absolute lg:top-[700px] lg:max-w-none lg:w-auto lg:mt-0
+            ">
               <ItemCard text={"Explain your interests"} ItemIcon={Brain} />
               <ItemCard text={"Choose update frequency"} ItemIcon={Clock} />
-              <ItemCard text={"AI researches for you "} ItemIcon={Search} />
+              <ItemCard text={"AI researches for you"} ItemIcon={Search} />
               <ItemCard text={"Summaries in your inbox"} ItemIcon={Mail} />
             </div>
           </div>
 
+          {/* ━━━ PRICING ━━━ */}
           <div
-            className="w-full flex flex-col items-center relative"
+            className="w-full flex flex-col items-center relative px-4"
             ref={pricingRef}
           >
-            {/* <GradientText
-          text="Pricing"
-          gradient="linear-gradient(90deg, #92adff 0%, #ffffff 50%, #92adff 100%)"
-          className="z-40 mt-10 text-3xl font-bold"
-        /> */}
             <DarkVeil className={"absolute bottom-0  rotate-180 saturate-6"} />
 
-            <h4 className="text-white text-3xl z-60">
+            <h4 className="text-white text-xl sm:text-2xl lg:text-3xl z-60 text-center mt-8 lg:mt-0">
               Choose the plan best for you
             </h4>
 
-            <div className="flex w-full mt-24 items-center justify-center gap-10 pb-20">
+            <div className="flex flex-col items-center gap-8 w-full mt-12 sm:mt-16 lg:mt-24 pb-16 sm:pb-20 lg:flex-row lg:justify-center lg:gap-10 lg:items-center">
               <PricingCard
                 planName={"Free"}
                 comment={"Perfect for trying Neuraletter"}
                 price={"0"}
                 features={["Analysis by free LLM models", "Unlimited topics per user"]}
               />
-              <div className="flex flex-col items-center mb-[25px] rounded-2xl ">
-                <p className="mb-[2px] z-30 text-white font-semibold">
+              <div className="hidden sm:flex flex-col items-center rounded-2xl order-first lg:order-none">
+                {/* <p className="mb-[2px] z-30 text-white font-semibold">
                   Most Popular
-                </p>
+                </p> */}
 
                 <PricingCard
                   planName={"Pro (coming soom)"}
@@ -217,6 +208,7 @@ export default function Home() {
                   ]}
                 />
               </div>
+              <div className="hidden sm:block">
               <PricingCard
                 planName={"Pro Plus (coming soon)"}
                 comment={"Perfect if research earns you money"}
@@ -229,6 +221,7 @@ export default function Home() {
                   "Cancel anytime",
                 ]}
               />
+              </div>
             </div>
           </div>
 

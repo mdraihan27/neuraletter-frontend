@@ -42,10 +42,10 @@ export default function Register() {
         className="mx-auto"
       ></Nav>
 
-      <div className=" flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 max-w-[500px]">
+      <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 w-full max-w-[460px] px-5">
         <GalleryVerticalEnd className="size-4" />
 
-        <SignupForm className={"scale-120 mt-20"} setIsLoading={setIsLoading} error={error}/>
+        <SignupForm className={"mt-20 sm:mt-24 lg:mt-8 w-full lg:scale-105"} setIsLoading={setIsLoading} error={error} />
       </div>
       <FooterColumns01 />
     </div>

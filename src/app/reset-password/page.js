@@ -23,7 +23,7 @@ export default function Login() {
           "radial-gradient(125% 125% at 50% 100%, #000000 40%, #0A1C57 100%)",
       }}
     >
-      {isLoading ? <Spinner/> : null}
+      {isLoading ? <Spinner /> : null}
       {/* <Loader isVisible={isLoading}></Loader> */}
 
       <Nav
@@ -34,8 +34,7 @@ export default function Login() {
         ]}
         className="mx-auto"
       ></Nav>
-      HELLO
-      <ResetPasswordForm className={"w-[400px] mt-60 mb-44 scale-130 "} setIsLoading={setIsLoading}></ResetPasswordForm>
+      <ResetPasswordForm className={"w-full max-w-[420px] px-5 mt-28 sm:mt-40 lg:mt-48 mb-16 sm:mb-24 lg:mb-32 lg:scale-110 "} setIsLoading={setIsLoading}></ResetPasswordForm>
       <FooterColumns01 />
     </div>
   );

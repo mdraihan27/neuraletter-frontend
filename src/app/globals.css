@@ -51,68 +51,84 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --animate-aurora: aurora 60s linear infinite;
+
   @keyframes aurora {
     from {
       backgroundposition: 50% 50%, 50% 50%;
     }
+
     to {
       backgroundposition: 350% 50%, 350% 50%;
     }
   }
-  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite
-    alternate;
+
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
   --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+
   @keyframes shimmer-slide {
     to {
       transform: translate(calc(100cqw - 100%), 0);
     }
   }
+
   @keyframes spin-around {
     0% {
       transform: translateZ(0) rotate(0);
     }
+
     15%,
     35% {
       transform: translateZ(0) rotate(90deg);
     }
+
     65%,
     85% {
       transform: translateZ(0) rotate(270deg);
     }
+
     100% {
       transform: translateZ(0) rotate(360deg);
     }
   }
+
   @keyframes aurora {
     0% {
       background-position: 0% 50%;
       transform: rotate(-5deg) scale(0.9);
     }
+
     25% {
       background-position: 50% 100%;
       transform: rotate(5deg) scale(1.1);
     }
+
     50% {
       background-position: 100% 50%;
       transform: rotate(-3deg) scale(0.95);
     }
+
     75% {
       background-position: 50% 0%;
       transform: rotate(3deg) scale(1.05);
     }
+
     100% {
       background-position: 0% 50%;
       transform: rotate(-5deg) scale(0.9);
     }
   }
+
   --animate-shine: shine var(--duration) infinite linear;
+
   @keyframes shine {
     0% {
       background-position: 0% 0%;
     }
+
     50% {
       background-position: 100% 100%;
     }
+
     to {
       background-position: 0% 0%;
     }
@@ -121,10 +137,12 @@
 
 @theme inline {
   --animate-aurora: aurora 60s linear infinite;
+
   @keyframes aurora {
     from {
       background-position: 50% 50%, 50% 50%;
     }
+
     to {
       background-position: 350% 50%, 350% 50%;
     }
@@ -134,18 +152,26 @@
 body {
   font-family: "Poppins", Arial, Helvetica, sans-serif;
 }
+
 /* Hide main (page) scrollbar across browsers while keeping scroll functional */
-html, body {
-  -ms-overflow-style: none; /* IE & Edge */
-  scrollbar-width: none; /* Firefox */
+html,
+body {
+  -ms-overflow-style: none;
+  /* IE & Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
-html::-webkit-scrollbar, body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 /* Custom scrollbar for internal scrollable panels */
 .custom-scrollbar {
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin;
+  /* Firefox */
   scrollbar-color: var(--focused) transparent;
 }
 
@@ -167,6 +193,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: var(--hover-focused);
 }
+
 .poppins-thin {
   font-family: "Poppins", sans-serif;
   font-weight: 100;
@@ -290,8 +317,10 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 /* Custom red scrollbar for chat list */
 .chat-scroll {
   overflow-y: auto;
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #97adff50 transparent; /* Firefox */
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: #97adff50 transparent;
+  /* Firefox */
 }
 
 .chat-scroll::-webkit-scrollbar {
@@ -303,27 +332,24 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 .chat-scroll::-webkit-scrollbar-thumb {
-  background-color: #97adff; /* red */
+  background-color: #97adff;
+  /* red */
   border-radius: 9999px;
 }
 
 /* Subtle top/bottom fade for chat content */
 .chat-fade {
   position: relative;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black 32px,
-    black calc(100% - 32px),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black 32px,
-    black calc(100% - 32px),
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0,
+      black 32px,
+      black calc(100% - 32px),
+      transparent 100%);
+  mask-image: linear-gradient(to bottom,
+      transparent 0,
+      black 32px,
+      black calc(100% - 32px),
+      transparent 100%);
 }
 
 
@@ -401,15 +427,17 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 
 @theme inline {
   --animate-meteor-effect: meteor 5s linear infinite;
- 
+
   @keyframes meteor {
     0% {
       transform: rotate(215deg) translateX(0);
       opacity: 1;
     }
+
     70% {
       opacity: 1;
     }
+
     100% {
       transform: rotate(215deg) translateX(-500px);
       opacity: 0;
@@ -433,6 +461,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -441,28 +470,39 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 
 /* Hide vertical scrollbar */
 .hide-scrollbar-y {
-  overflow-y: scroll; /* keeps scrolling functional */
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* Firefox */
+  overflow-y: scroll;
+  /* keeps scrolling functional */
+  -ms-overflow-style: none;
+  /* IE, Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .hide-scrollbar-y::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 /* Hide horizontal scrollbar */
 .hide-scrollbar-x {
-  overflow-x: scroll; /* keeps scrolling functional */
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* Firefox */
+  overflow-x: scroll;
+  /* keeps scrolling functional */
+  -ms-overflow-style: none;
+  /* IE, Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .hide-scrollbar-x::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -476,10 +516,28 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 .scroller .animate-scroll {
-  animation: scroll var(--animation-duration,40s) linear infinite;
+  animation: scroll var(--animation-duration, 40s) linear infinite;
   animation-direction: var(--animation-direction, normal);
 }
 
 .scroller:hover .animate-scroll {
   animation-play-state: paused;
+}
+
+/* ─── Disable decorative animations on mobile (keep spinners/loaders/transitions working) ─── */
+@media (max-width: 767px) {
+  .scroller .animate-scroll {
+    animation: none !important;
+  }
+
+  .after\:animate-aurora::after,
+  [class*="animate-aurora"] {
+    animation: none !important;
+  }
+
+  [class*="animate-shimmer"],
+  [class*="animate-meteor"],
+  [class*="animate-shine"] {
+    animation: none !important;
+  }
 }

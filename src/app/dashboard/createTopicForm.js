@@ -17,7 +17,7 @@ const AVAILABLE_MODELS = [
   { value: "mistral-large-2512", label: "Mistral Large 3" },
 ];
 
-export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicList, setTopicList }) {
+export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicList, setTopicList, onTopicCreated }) {
   const [topicTitle, setTopicTitle] = useState("");
   const [topicTier, setTopicTier] = useState(AVAILABLE_TIERS[0].value);
   const [topicModel, setTopicModel] = useState(AVAILABLE_MODELS[0].value);
@@ -53,7 +53,10 @@ export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicL
     if (result.success) {
       setIsError(false);
       setMessage(result.data.message);
-     setTopicList(prev => [result.data.topic, ...prev]);
+      const newTopic = result.data.topic;
+      setTopicList(prev => [newTopic, ...prev]);
+      setIsCreateTopicFormVisible(false);
+      if (onTopicCreated) onTopicCreated(newTopic);
     } else {
       setIsError(true);
       setMessage(result.error);
@@ -70,35 +73,37 @@ export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicL
         </div>
       )}
 
-        <button
-          type="button"
-          className="absolute inset-0 z-0"
-          aria-label="Close create topic"
-          onClick={() => setIsCreateTopicFormVisible(false)}
-        />
-        <div
-          className={cn(
-            "absolute w-3/7 left-2/7 top-1/5 z-10 bg-zinc-800 rounded-xl shadow-2xl text-white p-4 shadow-black/50 "
-          )}
-        >
-          <div className="flex w-full justify-between">
-            <p className="font-medium text-xl">Create Topic</p>
-            <Plus
-              className="rotate-45 text-zinc-600 hover:text-red-300 cursor-pointer"
-              onClick={() => setIsCreateTopicFormVisible(false)}
+      <button
+        type="button"
+        className="absolute inset-0 z-0"
+        aria-label="Close create topic"
+        onClick={() => setIsCreateTopicFormVisible(false)}
+      />
+      <div
+        className={cn(
+          "absolute z-10 bg-zinc-800 rounded-xl shadow-2xl text-white p-4 shadow-black/50",
+          "w-[calc(100%-2rem)] left-4 top-1/2 -translate-y-1/2",
+          "sm:w-3/7 sm:left-2/7 sm:top-1/5 sm:translate-y-0"
+        )}
+      >
+        <div className="flex w-full justify-between">
+          <p className="font-medium text-xl">Create Topic</p>
+          <Plus
+            className="rotate-45 text-zinc-600 hover:text-red-300 cursor-pointer"
+            onClick={() => setIsCreateTopicFormVisible(false)}
+          />
+        </div>
+
+        <div className="w-full p-3 pt-8 flex flex-col gap-4">
+          <div className="border border-zinc-400 rounded-md flex flex-col gap-1 px-3 py-2">
+            <p className="text-xs">Topic Title</p>
+            <input
+              className="focus:outline-none text-lg"
+              type="text"
+              value={topicTitle}
+              onChange={(e) => setTopicTitle(e.target.value)}
             />
           </div>
-
-          <div className="w-full p-3 pt-8 flex flex-col gap-4">
-            <div className="border border-zinc-400 rounded-md flex flex-col gap-1 px-3 py-2">
-              <p className="text-xs">Topic Title</p>
-              <input
-                className="focus:outline-none text-lg"
-                type="text"
-                value={topicTitle}
-                onChange={(e) => setTopicTitle(e.target.value)}
-              />
-            </div>
 
           <div className="border border-zinc-400 rounded-md flex flex-col gap-1 px-3 py-2">
             <p className="text-xs">Topic Tier</p>
@@ -153,24 +158,24 @@ export function CreateTopicForm({ className, setIsCreateTopicFormVisible, topicL
             />
           </div>
 
-            <div className="flex justify-between items-center pt-4">
-              <p
-                className={cn(
-                  "text-sm",
-                  isError ? "text-red-300" : "text-green-400"
-                )}
-              >
-                {message}
-              </p>
-              <button
-                className="px-3 py-2 bg-focused text-zinc-800 rounded-sm hover:bg-hover-focused cursor-pointer"
-                onClick={handleCreateClick}
-              >
-                Create
-              </button>
-            </div>
+          <div className="flex justify-between items-center pt-4">
+            <p
+              className={cn(
+                "text-sm",
+                isError ? "text-red-300" : "text-green-400"
+              )}
+            >
+              {message}
+            </p>
+            <button
+              className="px-3 py-2 bg-focused text-zinc-800 rounded-sm hover:bg-hover-focused cursor-pointer"
+              onClick={handleCreateClick}
+            >
+              Create
+            </button>
           </div>
         </div>
+      </div>
     </div>
   );
 }

@@ -35,7 +35,6 @@ export function LoginForm({ className, setIsLoading, error, ...props }) {
   const handleLoginClick = async () => {
     setIsLoading(true);
     const result = await login(email, password);
-    setIsLoading(false);
 
     if (result.success) {
       console.log(result);
@@ -43,7 +42,7 @@ export function LoginForm({ className, setIsLoading, error, ...props }) {
         const codeResult = await sendVerificationCode();
 
         if (codeResult.success) {
-          redirect("/verification");
+          redirect(`/verification?email=${encodeURIComponent(email)}`);
         } else {
           redirect("/dashboard");
         }
@@ -51,6 +50,7 @@ export function LoginForm({ className, setIsLoading, error, ...props }) {
         redirect("/dashboard");
       }
     } else {
+      setIsLoading(false);
       setMessage(result.error);
     }
   };
@@ -92,7 +92,7 @@ export function LoginForm({ className, setIsLoading, error, ...props }) {
                   type="email"
                   placeholder="raihan@example.com"
                   required
-                  value={email} 
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Field>

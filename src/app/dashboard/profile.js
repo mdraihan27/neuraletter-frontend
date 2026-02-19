@@ -28,7 +28,7 @@ export function Profile({ className, setIsProfileVisible }) {
     return () => clearTimeout(timer);
   }, [message]);
 
-  
+
 
   const handleUpdateClick = async () => {
     setIsLoading(true);
@@ -60,16 +60,29 @@ export function Profile({ className, setIsProfileVisible }) {
   };
 
   return (
-    <div className="">
+    <div className={cn("fixed inset-0 z-50", className)}>
       {isLoading ? (
         <div className="fixed inset-0 z-[100]">
           <Spinner />
         </div>
       ) : null}
+
+      {/* Backdrop — click to close */}
+      <button
+        type="button"
+        className="absolute inset-0 z-0"
+        aria-label="Close profile"
+        onClick={() => setIsProfileVisible(false)}
+      />
+
+      {/* Profile card — centered on all screens */}
       <div
         className={cn(
-          "absolute left-1/3 top-1/5  z-10  bg-zinc-800  rounded-xl shadow-2xl text-white p-4 shadow-black/50 ",
-          className
+          "absolute z-10 bg-zinc-800 rounded-xl shadow-2xl text-white p-4 shadow-black/50",
+          // Mobile: near full width, centered
+          "w-[calc(100%-2rem)] left-4 top-1/2 -translate-y-1/2",
+          // Desktop: original positioning
+          "sm:w-auto sm:left-1/3 sm:top-1/5 sm:translate-y-0"
         )}
       >
         <div className="flex w-full justify-between">
@@ -82,11 +95,11 @@ export function Profile({ className, setIsProfileVisible }) {
         </div>
 
         <div className="w-full p-3 pt-8">
-          <div className="flex gap-5 justify-between">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-between">
             <div className="border-1 border-zinc-400 rounded-md flex flex-col gap-1 px-3 py-2">
               <p className="text-xs">First Name</p>
               <input
-                className="focus:outline-none text-lg w-[256px]"
+                className="focus:outline-none text-lg w-full sm:w-[256px]"
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -95,7 +108,7 @@ export function Profile({ className, setIsProfileVisible }) {
             <div className="border-1 border-zinc-400 rounded-md flex flex-col gap-1 px-3 py-2">
               <p className="text-xs">Last Name</p>
               <input
-                className="focus:outline-none text-lg w-[256px]"
+                className="focus:outline-none text-lg w-full sm:w-[256px]"
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -121,7 +134,7 @@ export function Profile({ className, setIsProfileVisible }) {
 
           <div className="flex flex-col gap-1">
             <p className="text-xs">Email</p>
-            <p className="text-lg">{email}</p>
+            <p className="text-lg break-all sm:break-normal">{email}</p>
           </div>
 
           <div>

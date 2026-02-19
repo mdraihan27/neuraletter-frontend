@@ -37,12 +37,12 @@ export function SignupForm({ className, setIsLoading, error, ...props }) {
   const handleSignupClick = async () => {
     setIsLoading(true);
     const result = await signup(firstName, lastName, email, password);
-    
+
     if (result.success) {
       const codeResult = await sendVerificationCode();
       console.log(codeResult)
       if (codeResult.success) {
-        redirect("/verification");
+        redirect(`/verification?email=${encodeURIComponent(email)}`);
       } else {
         // redirect("/dashboard");
       }
@@ -55,9 +55,9 @@ export function SignupForm({ className, setIsLoading, error, ...props }) {
   const handleGoogleSignupClick = async () => {
     setIsLoading(true);
     const result = await googleLogin()
-    
+
     if (result.success) {
-    //  redirect(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/login`);
+      //  redirect(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/login`);
     } else {
       setMessage(result.error);
     }
@@ -85,7 +85,7 @@ export function SignupForm({ className, setIsLoading, error, ...props }) {
         <CardContent>
           <form>
             <FieldGroup>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Field>
                   <FieldLabel htmlFor="name">First Name</FieldLabel>
                   <Input
@@ -121,7 +121,7 @@ export function SignupForm({ className, setIsLoading, error, ...props }) {
                 />
               </Field>
               <Field>
-                <Field className="grid grid-cols-2 gap-4">
+                <Field className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
                     <Input
@@ -141,8 +141,8 @@ export function SignupForm({ className, setIsLoading, error, ...props }) {
                         passwordMatched === true
                           ? "bg-[#19ff1930]"
                           : passwordMatched === false
-                          ? "bg-[#df1a1a30]"
-                          : "bg-transparent"
+                            ? "bg-[#df1a1a30]"
+                            : "bg-transparent"
                       }
                       id="confirm-password"
                       type="password"
