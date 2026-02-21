@@ -24,7 +24,7 @@ export async function createTopic(title, tier, model, updateFrequencyHours = 24)
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to create topic",
+      error: data?.message || data?.detail?.message || data?.detail || "Failed to create topic",
     };
   } catch (error) {
     return {
@@ -53,7 +53,7 @@ export async function getUserTopics() {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to fetch topics",
+      error: data?.message || data?.detail?.message || data?.detail || "Failed to fetch topics",
     };
   } catch (error) {
     return {
@@ -82,7 +82,7 @@ export async function getTopicById(topicId) {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Topic not found",
+      error: data?.message || data?.detail?.message || data?.detail || "Topic not found",
     };
   } catch (error) {
     return {
@@ -111,7 +111,7 @@ export async function deleteTopic(topicId) {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to delete topic",
+      error: data?.message || data?.detail?.message || data?.detail || "Failed to delete topic",
     };
   } catch (error) {
     return {
@@ -144,7 +144,7 @@ export async function updateTopic(topicId, updates) {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to update topic",
+      error: data?.message || data?.detail?.message || data?.detail || "Failed to update topic",
     };
   } catch (error) {
     return {
