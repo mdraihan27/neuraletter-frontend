@@ -26,7 +26,7 @@ export async function getTopicChat(topicId) {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to fetch topic chat",
+      error: data?.message || data?.detail?.message || data?.detail || "Failed to fetch topic chat",
     };
   } catch (error) {
     return {
@@ -65,7 +65,7 @@ export async function chatWithAi(topic_id, message) {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to fetch topic chat",
+      error: data?.message || data?.detail?.message || data?.detail || "Failed to fetch topic chat",
     };
   } catch (error) {
     return {

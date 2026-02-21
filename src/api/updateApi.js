@@ -23,7 +23,7 @@ export async function getUpdates(topic_id) {
 
     return {
       success: false,
-      error: data?.message || data?.detail || "Failed to fetch updates",
+      error: data?.message || data?.detail?.message || data?.detail || "Failed to fetch updates",
     };
   } catch (error) {
     return {
